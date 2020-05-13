@@ -12,14 +12,14 @@ with open('SPX_20180904_to_20180928.csv', 'r') as csv_file:
     lines = csv_file.readlines()
     entireList = []
     stockNames = []
-    premiumBidPrices = []
-    dates = []
-    strike_2300_calls = []
+    dates_2300_call = []
+    strike_2300_call_bid_prices = []
     for line in lines:
         lineList = line.split(',')
         stockNames.append(lineList[0])
-        if lineList[4] ==  'call' and line != lines[0]:
-            premiumBidPrices.append(lineList[12])
+        if lineList[4] == 'call' and line != lines[0] and lineList[7] == '2300':
+            strike_2300_calls.append(lineList[12])
+            dates_2300_call.append(lineList[])
         for x in lineList:
             if (x != '/n'):
                 entireList.append(x)
