@@ -18,16 +18,13 @@ with open('SPX_20180904_to_20180928.csv', 'r') as csv_file:
         lineList = line.split(',')
         stockNames.append(lineList[0])
         if lineList[4] == 'call' and line != lines[0] and lineList[7] == '2300':
-            strike_2300_calls.append(lineList[12])
-            dates_2300_call.append(lineList[])
+            strike_2300_call_bid_prices.append(lineList[12])
         for x in lineList:
             if (x != '/n'):
                 entireList.append(x)
 
 
-print(premiumBidPrices)
 print(len(stockNames))
-print(len(premiumBidPrices))
 
 
 #Data visualizations
