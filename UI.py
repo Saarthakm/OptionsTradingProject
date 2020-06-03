@@ -10,7 +10,7 @@ from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from kivy.core.image import Image as CoreImage
-
+from premiums_scraper import *
 
 
 
@@ -25,8 +25,10 @@ class OptionizeGrid(GridLayout):
         self.view_SPX.bind(on_press = self.premiumPressed)
         self.view_SP500Dynamic = Button(text="View Live-Time SP500 Option Premium Trend Plots")
         self.add_widget(self.view_SP500Dynamic)
-        self.logo = CoreImage("OptionizeLogo.png")
-        self.add_widget(self.logo)
+        self.ticker_search = TextInput(text='Enter a stock ticker here: ', multiline=False)
+        self.add_widget(self.ticker_search)
+        self.ticker_search.bind(on_text_validate=self.on_enter)
+
 
 
 
@@ -43,6 +45,20 @@ class OptionizeGrid(GridLayout):
         plt.xlabel('entry a')
         plt.ylabel('entry b')
         plt.show()
+
+    def on_enter(self, instance):
+        ticker = self.ticker_search.text
+        self.ticker_search.text = "Enter a stock ticker here: "
+
+        for x in self.ticker_search.text:
+            if x
+
+        for tickerNames in all_major_stocks_tickers:
+            if ticker != tickerNames:
+                print("This stock is not in S&P500, NASDAQ, or DOW! Please enter another valid ticker!")
+
+        print(ticker)
+
 
 
 
