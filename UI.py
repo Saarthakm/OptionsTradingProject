@@ -1,6 +1,7 @@
 import kivy
 import numpy as np
 import matplotlib.pyplot as plt
+import re
 from dataCollector import Option
 from kivy.app import App
 from kivy.uix.label import Label
@@ -47,17 +48,24 @@ class OptionizeGrid(GridLayout):
         plt.show()
 
     def on_enter(self, instance):
+        ticker_regex = re.compile('[A-Z]*')
         ticker = self.ticker_search.text
         self.ticker_search.text = "Enter a stock ticker here: "
+        #only includes ticker, and not the "enter stock here text"
+        ticker = ticker[27:]
+        regex_matcher = ticker_regex.match(ticker)
 
-        for x in self.ticker_search.text:
-            if x
+        if regex_matcher == False:
+            print("This is not a valid ticker!")
 
-        for tickerNames in all_major_stocks_tickers:
-            if ticker != tickerNames:
-                print("This stock is not in S&P500, NASDAQ, or DOW! Please enter another valid ticker!")
+        else:
+            for tickerNames in all_major_stocks_tickers:
+                if ticker != tickerNames:
+                    print("This stock is not in S&P500, NASDAQ, or DOW! Please enter another valid ticker!")
+                    break;
 
         print(ticker)
+        print(tickerNames[2])
 
 
 
