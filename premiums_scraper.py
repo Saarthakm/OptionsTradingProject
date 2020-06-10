@@ -63,15 +63,32 @@ def putPercentChange(ticker, strike):
     percentChange = oneRowDataframe.iloc[0]['% Change']
     return percentChange
 
-##Optimal day trade for calls is when gamma, delta, volume is highest, theta is lowest
+##Optimal day trade for calls is when gamma, delta, volume is highest, theta is lowest, returns optimal STRIKE price
 def optimalDayTradeCall(ticker):
     callChart = options.get_calls(ticker)
     csv = callChart.to_csv(ticker + '.csv')
     tickerDf = pd.read_csv(ticker + '.csv')
     strikeList = tickerDf['Strike'].to_list()
-    print(strikeList)
+    volumeList = tickerDf['Volume'].to_list()
+    for i in range(len(volumeList)):
+        if volumeList[i] == '-':
+            volumeList[i] = int('0')
+    #Volume Dictionary has keys as strike prices and values as volume
+    volumeDictionary = {}
+    keys = strikeList
+    x = 0
+    for i in keys:
+        volumeDictionary[i] = int(volumeList[x])
+        x += 1
+    sortedLst = sorted([value, key] for (key, value) in volumeDictionary.items())
+    rankDictionary = {}
+    
+    print(sortedLst)
+
+
 
 def calculateHedgeRatio(ticker):
     print("hi")
+
 
 optimalDayTradeCall('nflx')
