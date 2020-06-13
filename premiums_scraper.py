@@ -4,7 +4,14 @@ import csv
 from yahoo_fin import stock_info as si
 import pandas as pd
 import yfinance as yf
+import bs4
+import requests
+from bs4 import BeautifulSoup
 
+"""
+@author: Saarthak Maheshwari
+
+"""
 #Getting all option expiration dates of a stock
 nflx_dates = options.get_expiration_dates("nflx")
 nflx_calls = options.get_calls("nflx")
@@ -100,6 +107,8 @@ def calculateHedgeRatio(ticker):
 #dataframeMsft = pd.DataFrame(x)
 #print(dataframeMsft)
 
+
+##add cases for long holds and ER plays
 def calculateStopLoss(ticker, strike, optionType):
     if optionType == 'Call' or optionType == 'call':
         callChart = options.get_calls(ticker)
@@ -132,7 +141,11 @@ def calculateStopLoss(ticker, strike, optionType):
             print("Set Stop Loss Between: $", limitPriceUpper, "and $", limitPriceLower)
 
 
-calculateStopLoss('amd', 80, 'Call')
+#helper function for stopLoss function and other future functions:
+def earningsReportDate(ticker):
+    r = requests.get('https://finance.yahoo.com/calendar/earnings/?symbol=' + ticker)
+    soup = bs4.BeautifulSoup(r.text, "xml")
+    print(soup.find_all('table'))
 
-callChart = options.get_calls('t')
-adf = callChart.to_csv('t.csv')
+
+earningsReportDate("nflx")
