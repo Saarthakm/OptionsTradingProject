@@ -3,6 +3,7 @@ from yahoo_fin import options
 import csv
 from yahoo_fin import stock_info as si
 import pandas as pd
+import yfinance as yf
 
 #Getting all option expiration dates of a stock
 nflx_dates = options.get_expiration_dates("nflx")
@@ -82,7 +83,7 @@ def optimalDayTradeCall(ticker):
         x += 1
     sortedLst = sorted([value, key] for (key, value) in volumeDictionary.items())
     rankDictionary = {}
-    
+
     print(sortedLst)
 
 
@@ -91,4 +92,47 @@ def calculateHedgeRatio(ticker):
     print("hi")
 
 
-optimalDayTradeCall('nflx')
+#optimalDayTradeCall('nflx')
+
+#msft = yf.Ticker("MSFT")
+#print(msft.options)
+#x = msft.option_chain('2020-06-18')
+#dataframeMsft = pd.DataFrame(x)
+#print(dataframeMsft)
+
+def calculateStopLoss(ticker, strike, optionType):
+    if optionType == 'Call' or optionType == 'call':
+        callChart = options.get_calls(ticker)
+        cdf = pd.DataFrame(callChart)
+        oneRowDataframe = cdf.loc[cdf['Strike'] == strike]
+        ask = oneRowDataframe.iloc[0]['Ask']
+        bid = oneRowDataframe.iloc[0]['Bid']
+        currPrice = oneRowDataframe.iloc[0]['Last Price']
+        limitPriceUpper = (currPrice - (currPrice * .2)) - (ask - bid)
+        limitPriceLower = (currPrice - (currPrice * .15)) - (ask - bid)
+        if limitPriceLower < 0 or limitPriceUpper < 0:
+            print("No need to set stop loss! This option premium is too low for a stop loss!")
+        elif limitPriceUpper != limitPriceLower:
+            print("Set Stop Loss Between: $", limitPriceUpper, "and $", limitPriceLower)
+
+
+
+    if optionType == 'Put' or optionType == 'Put':
+        putChart = options.get_puts(ticker)
+        pdf = pd.DataFrame(putChart)
+        oneRowDataframe = pdf.loc[pdf['Strike'] == strike]
+        ask = oneRowDataframe.iloc[0]['Ask']
+        bid = oneRowDataframe.iloc[0]['Bid']
+        currPrice = oneRowDataframe.iloc[0]['Last Price']
+        limitPriceUpper = (currPrice - (currPrice * .2)) - (ask - bid)
+        limitPriceLower = (currPrice - (currPrice * .15)) - (ask - bid)
+        if limitPriceLower < 0 or limitPriceUpper < 0:
+            print("No need to set stop loss! This option premium is too low for a stop loss!")
+        elif limitPriceUpper != limitPriceLower:
+            print("Set Stop Loss Between: $", limitPriceUpper, "and $", limitPriceLower)
+
+
+calculateStopLoss('amd', 80, 'Call')
+
+callChart = options.get_calls('t')
+adf = callChart.to_csv('t.csv')
