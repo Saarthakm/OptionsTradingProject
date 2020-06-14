@@ -7,11 +7,14 @@ import yfinance as yf
 import bs4
 import requests
 from bs4 import BeautifulSoup
+import mechanize
+from py_vollib.black_scholes.greeks.analytical import delta
+from py_vollib.black_scholes.greeks.analytical import gamma
+from py_vollib.black_scholes.greeks.analytical import theta
+from py_vollib.black_scholes.greeks.analytical import vega
+from py_vollib.black_scholes.greeks.analytical import rho
+from datetime import date
 
-"""
-@author: Saarthak Maheshwari
-
-"""
 #Getting all option expiration dates of a stock
 nflx_dates = options.get_expiration_dates("nflx")
 nflx_calls = options.get_calls("nflx")
@@ -140,12 +143,21 @@ def calculateStopLoss(ticker, strike, optionType):
         elif limitPriceUpper != limitPriceLower:
             print("Set Stop Loss Between: $", limitPriceUpper, "and $", limitPriceLower)
 
+#helper function, calculates option expiration in years as a decimal (ex: .3845 years)
+def optionExpiration(ticker, date):
+    today = date.today()
+    expireyLst = getOptionExpirationDates(ticker)
+    if date in expireyLst:
+        x = 1
+    else:
+        print("This date is not a valid option expiration for this stock!")
 
-#helper function for stopLoss function and other future functions:
-def earningsReportDate(ticker):
-    r = requests.get('https://finance.yahoo.com/calendar/earnings/?symbol=' + ticker)
-    soup = bs4.BeautifulSoup(r.text, "xml")
-    print(soup.find_all('table'))
+def getOptionExpirationDates(ticker):
+    expireyLst = options.get_expiration_dates(ticker)
+    return expireyLst
 
 
-earningsReportDate("nflx")
+
+
+print(delta('c', 49, 50, .3846, .05, .2))
+print(options.get_expiration_dates('nflx'))
