@@ -14,6 +14,9 @@ from py_vollib.black_scholes.greeks.analytical import theta
 from py_vollib.black_scholes.greeks.analytical import vega
 from py_vollib.black_scholes.greeks.analytical import rho
 from datetime import date
+import datetime
+import quandl as q
+
 
 #Getting all option expiration dates of a stock
 nflx_dates = options.get_expiration_dates("nflx")
@@ -143,21 +146,77 @@ def calculateStopLoss(ticker, strike, optionType):
         elif limitPriceUpper != limitPriceLower:
             print("Set Stop Loss Between: $", limitPriceUpper, "and $", limitPriceLower)
 
-#helper function, calculates option expiration in years as a decimal (ex: .3845 years)
-def optionExpiration(ticker, date):
-    today = date.today()
-    expireyLst = getOptionExpirationDates(ticker)
-    if date in expireyLst:
-        x = 1
-    else:
-        print("This date is not a valid option expiration for this stock!")
+#helper function, calculates option expiration in years as a decimal (ex: .3845 years), ASSUMES DATE IS INPUTTED AS XX-XX-XXXX
+def optionExpiration(expiration):
+    today = datetime.datetime.today()
+    todayyr = today.year
+    todaymth = today.month
+    todayday = today.day
+    lst = expiration.split("-")
+    expirationyr = int(lst[0])
+    expirationmth = int(lst[1])
+    expirationday = int(lst[2])
+    todayDate = datetime.date(todayyr, todaymth, todayday)
+    expirationDate = datetime.date(expirationyr, expirationmth, expirationday)
+    delta = expirationDate - todayDate
+    return (delta.days / 365)
+
 
 def getOptionExpirationDates(ticker):
     expireyLst = options.get_expiration_dates(ticker)
     return expireyLst
 
 
+def calculateGreeks(ticker, date, type, strike):
+    if type == 'call' or type == "call":
+        callData = options.get_calls(ticker, date)
+        pdf = pd.DataFrame(callData)
+        oneRowDataframe = pdf.loc[pdf['Strike'] == strike]
+        S = (oneRowDataframe.iloc[0]['Last Price'])
+        K = strike
+        sigma = (oneRowDataframe.iloc[0]['Implied Volatility'])
+        sigma = str(sigma)
+        sigma = sigma.replace('%', '')
+        sigma = float(sigma)
+        t = optionExpiration(date)
+        r = calculateTreasuryYield(date)
+        flag = 'c'
+        dlta = delta(flag, S, K, t, r, sigma)
+        gam = gamma(flag, S, K, t, r, sigma)
+        thta = theta(flag, S, K, t, r, sigma)
+        vga = vega(flag, S, K, t, r, sigma)
+        rh = rho(flag, S, K, t, r, sigma)
+        print({"delta": dlta, "gamma": gam, "theta": thta, "vega": vga, "rho": rh})
 
 
-print(delta('c', 49, 50, .3846, .05, .2))
-print(options.get_expiration_dates('nflx'))
+def calculateTreasuryYield(expirationDate):
+    #add case when date is not in table (i.e. date is a weekend)
+    USYieldTable = q.get("USTREASURY/YIELD")
+    csv = USYieldTable.to_csv("treasuryYields.csv")
+    ydf = pd.read_csv("treasuryYields.csv")
+    ydf = ydf.drop(ydf.columns[[7, 8, 9, 10, 11, 12]], axis=1)
+    onerdf = ydf.loc[ydf['Date'] == '2020-06-12']
+    timeLst = [1/2, 1/6, 1/4, 1/2, 1, 2]
+    timeDict = {"1 MO": 1/2, "2 MO": 1/6, "3 MO": 1/4, "6 MO": 1/2, "1 YR": 1, "2 YR": 2}
+    tm = optionExpiration(expirationDate)
+    subtractedLst = []
+    for i in range(5):
+        x = abs(tm - timeLst[i])
+        subtractedLst.append(x)
+    minIndex = subtractedLst.index(min(subtractedLst))
+    finalTime = timeLst[minIndex]
+    key_list = list(timeDict.keys())
+    val_list = list(timeDict.values())
+    final = key_list[val_list.index(finalTime)]
+    yieldDecimal = onerdf.iloc[0][final]
+    return yieldDecimal
+
+
+
+
+calculateGreeks('nflx', '2020-06-19', 'call', 420)
+
+
+
+#converts one type of date to another
+#datetime.datetime.strptime("2013-1-25", '%Y-%m-%d').strftime('%m/%d/%y')
