@@ -3,6 +3,7 @@ from yahoo_fin import options
 import csv
 from yahoo_fin import stock_info as si
 import pandas as pd
+import numpy as np
 import yfinance as yf
 import bs4
 import requests
@@ -16,11 +17,8 @@ from py_vollib.black_scholes.greeks.analytical import rho
 from datetime import date
 import datetime
 import quandl as q
-
-
-#Getting all option expiration dates of a stock
-nflx_dates = options.get_expiration_dates("nflx")
-nflx_calls = options.get_calls("nflx")
+from yahoo_finance import Share
+import matplotlib.pyplot as plt
 
 #Creates a list of all DOW tickers
 dow_tickers = si.tickers_dow()
@@ -78,10 +76,10 @@ def putPercentChange(ticker, strike):
     return percentChange
 
 ##Optimal day trade for calls is when gamma, delta, volume is highest, theta is lowest, returns optimal STRIKE price
-def optimalDayTradeCall(ticker):
-    callChart = options.get_calls(ticker)
-    csv = callChart.to_csv(ticker + '.csv')
-    tickerDf = pd.read_csv(ticker + '.csv')
+def optimalDayTradeCall(ticker, date):
+    callChart = options.get_calls(ticker, date)
+    csv = callChart.to_csv(ticker + date + '.csv')
+    tickerDf = pd.read_csv(ticker + date + '.csv')
     strikeList = tickerDf['Strike'].to_list()
     volumeList = tickerDf['Volume'].to_list()
     for i in range(len(volumeList)):
@@ -132,6 +130,7 @@ def calculateStopLoss(ticker, strike, optionType):
 
 
 
+
     if optionType == 'Put' or optionType == 'Put':
         putChart = options.get_puts(ticker)
         pdf = pd.DataFrame(putChart)
@@ -168,19 +167,15 @@ def getOptionExpirationDates(ticker):
 
 
 def calculateGreeks(ticker, date, type, strike):
-    if type == 'call' or type == "call":
-        callData = options.get_calls(ticker, date)
-        pdf = pd.DataFrame(callData)
-        oneRowDataframe = pdf.loc[pdf['Strike'] == strike]
-        S = (oneRowDataframe.iloc[0]['Last Price'])
+        S = si.get_live_price(ticker)
         K = strike
-        sigma = (oneRowDataframe.iloc[0]['Implied Volatility'])
-        sigma = str(sigma)
-        sigma = sigma.replace('%', '')
-        sigma = float(sigma)
+        sigma = calculateAnnualizedVolatility(ticker)
         t = optionExpiration(date)
         r = calculateTreasuryYield(date)
-        flag = 'c'
+        if type == 'Call' or type == "call" or type == "C" or type == 'c':
+            flag = 'c'
+        else:
+            flag = 'p'
         dlta = delta(flag, S, K, t, r, sigma)
         gam = gamma(flag, S, K, t, r, sigma)
         thta = theta(flag, S, K, t, r, sigma)
@@ -188,14 +183,17 @@ def calculateGreeks(ticker, date, type, strike):
         rh = rho(flag, S, K, t, r, sigma)
         print({"delta": dlta, "gamma": gam, "theta": thta, "vega": vga, "rho": rh})
 
-
 def calculateTreasuryYield(expirationDate):
-    #add case when date is not in table (i.e. date is a weekend)
+    #add case when date is not in table (i.e. gdate is a weekend)
+    x = datetime.datetime.today() - datetime.timedelta(days=1)
+    y = x.strftime("%Y-%m-%d, %H:%M:%S")
+    y = y.split(',')
+    y = y[0]
     USYieldTable = q.get("USTREASURY/YIELD")
     csv = USYieldTable.to_csv("treasuryYields.csv")
     ydf = pd.read_csv("treasuryYields.csv")
     ydf = ydf.drop(ydf.columns[[7, 8, 9, 10, 11, 12]], axis=1)
-    onerdf = ydf.loc[ydf['Date'] == '2020-06-12']
+    onerdf = ydf.loc[ydf['Date'] == y]
     timeLst = [1/2, 1/6, 1/4, 1/2, 1, 2]
     timeDict = {"1 MO": 1/2, "2 MO": 1/6, "3 MO": 1/4, "6 MO": 1/2, "1 YR": 1, "2 YR": 2}
     tm = optionExpiration(expirationDate)
@@ -212,9 +210,34 @@ def calculateTreasuryYield(expirationDate):
     return yieldDecimal
 
 
+def calculateAnnualizedVolatility(ticker):
+    data = yf.download(ticker.upper(), start='2018-6-1', end=date.today())
+    data['Log_Ret'] = np.log(data['Close'] / data['Close'].shift(1))
+    data['Volatility'] = data['Log_Ret'].rolling(window=252).std() * np.sqrt(252)
+    csv = data.to_csv(ticker + 'AnnVol' + '.csv')
+    df = pd.read_csv(ticker + 'AnnVol' + '.csv')
+    x = datetime.datetime.today() - datetime.timedelta(days=1)
+    y = x.strftime("%Y-%m-%d, %H:%M:%S")
+    y = y.split(',')
+    y = y[0]
+    oneRowDataframe = df.loc[df['Date'] == y]
+    annualizedVol = oneRowDataframe.iloc[0]['Volatility']
+    return float(annualizedVol)
 
 
-calculateGreeks('nflx', '2020-06-19', 'call', 420)
+
+def plotClosingPricesAndAnnualizedVolatility(ticker):
+    ata = yf.download(ticker.upper(), start='2018-6-1', end=date.today())
+    data['Log_Ret'] = np.log(data['Close'] / data['Close'].shift(1))
+    data['Volatility'] = data['Log_Ret'].rolling(window=252).std() * np.sqrt(252)
+    data[['Close', 'Volatility']].plot(subplots=True, color='green',figsize=(8, 6))
+    plt.show()
+
+
+
+#calculateGreeks('ge', '2021-01-15', 'call', 12)
+#calculateAnnualizedVolatility('bac')
+
 
 
 
