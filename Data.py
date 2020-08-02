@@ -158,7 +158,10 @@ class OPAlgorithms:
         df = DataFrame
 
         df= np.subtract(ewm_12["EWA 12 days"], ewm_26["EWA 26 days"])
-        df = np.multiply(df, 100)
+        # df = np.multiply(df, 100)
+        print(ticker.ticker)
+        print(df)
+
 
         return df
 
@@ -176,22 +179,19 @@ class OPAlgorithms:
 
             evm_short = self.ewm_full_data(stock,365,3)
             evm_short = evm_short.truncate(before=start_date)
-
+            mac = self.macd(stock)
+            mac = mac.truncate(before=start_date)
             volume = self.volume_data(stock,365)
-            print(volume)
             db = db.drop(columns=["open","volume","high", "low"])
 
-            ax = db.plot()
-            ab = avg_short.plot(ax=ax)
-            ag = evm_short.plot(ax=ab)
-            ap = avg_long.plot(ax=ag)
 
+            result = pd.concat([db,avg_long,avg_short,evm_short], axis = 1, join='outer')
 
-            # ax2 = ap.twinx()
-            # ax2.plot(volume)
-            # ax2.set_ylabel("volume(k)")
-
-
+            fig,(ax1,ax2) = plt.subplots(2,sharex = True)
+            result.plot(ax =ax1)
+            mac.plot(ax = ax2,label='MACD')
+            # plt.plot(ax = ax2, y=0)
+            ax1.set_title(stock.ticker)
             plt.legend(loc='best')
             plt.show()
 
@@ -203,18 +203,16 @@ pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows",100)
 # b = DataCollection(200)
 # b = b.list_to_frame()
-# b= DataFrame
+#  b= DataFrame
 # a = OPAlgorithms(b, 200)
-# a.data_plot()
+# print(a.analyze_pruned_list)
 # ua = Stock('HRC')
 # ub = Stock('COTY')
 uc = Stock('UA')
 # stocks = [ua,ub,uc]
 stockies = ["XPO","OPK","UMICY"]
 c = OPAlgorithms(stockies, 200)
-print(c.macd(uc))
 c.data_plot()
-# print(c.analyze_pruned_list())
 # print(a.sma(ua ,20).to_string)
 
 
