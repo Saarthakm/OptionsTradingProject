@@ -8,59 +8,7 @@ import requests
 from pyllist import sllist
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
-
-
-class Stock:
-    def __init__(self, ticker):
-        self.ticker = None
-        self.earnings = None
-        self.live_price = None
-        self.sma_3_month = None
-        self.ema_3_month = None
-        self.full_data = None
-        self.day_data = DataFrame
-        self.ticker = ticker
-        self.current_date = self.weekend_check() + relativedelta(days=+1)
-        self.date_3_months_ago = self.weekend_check()  + relativedelta(months=-3)
-        self.column_list = ['ticker', 'open', 'high', 'low', 'close', 'volume']
-
-    def __str__(self):
-        return self.ticker
-
-    def get_price(self):
-        self.live_price = si.get_live_price(self.ticker)
-        return self.live_price
-
-    def weekend_check(self):
-        date = datetime.date(datetime.now())
-        if date.weekday() == 5:
-            return datetime.date(datetime.now()) + relativedelta(days=-1)
-        if date.weekday() == 6:
-            return datetime.date(datetime.now()) + relativedelta(days=-2)
-        return date
-
-    def stock_day_data(self):
-
-
-        self.full_data = si.get_data(self.ticker, self.date_3_months_ago, self.current_date)
-        self.full_data = self.full_data.drop(columns=["adjclose"])
-        self.full_data = self.full_data.reindex(columns=self.column_list)
-        self.full_data[" EMA 3 Month "] = self.full_data.ewm(span=64)['close'].mean().fillna('-')
-        self.full_data[" SMA 3 Month "] = self.full_data.rolling(window=64)['close'].mean().fillna('-')
-        self.full_data[" EMA 1 Month "] = self.full_data.ewm(span=22)['close'].mean().fillna('-')
-        self.full_data[" SMA 1 Month "] = self.full_data.rolling(window=22)['close'].mean().fillna('-')
-        self.full_data[" EMA 1 Week "] = self.full_data.ewm(span=5)['close'].mean().fillna('-')
-        self.full_data[" SMA 1 Week"] = self.full_data.rolling(window=5)['close'].mean().fillna('-')
-        self.day_data = self.full_data.tail(1)
-        return self.day_data
-
-    def historical_data(self, period):
-        call_back_date = self.current_date + relativedelta(days=-period)
-        self.full_data = si.get_data(self.ticker, call_back_date, self.current_date)
-        self.full_data = self.full_data.drop(columns=["adjclose"])
-        self.full_data = self.full_data.reindex(columns=self.column_list)
-        return self.full_data
-
+import Stock as st
 
 class DataCollection:
     def __init__(self, portfolio):
@@ -83,9 +31,8 @@ class DataCollection:
                         i = "-"
                     q += i
                     z = q
-            stock = Stock(z)
+            stock = st.Stock(z)
             price = stock.get_price()
-
 
             if price < self.max_trade:
                 # data = stock.day_data()
@@ -93,17 +40,22 @@ class DataCollection:
 
         return self.list
 
-class OPAlgorithms:
+    def stock_create(self, tick):
+        s = st.Stock(tick)
+        return s
+
+
+class data_indicators:
     def __init__(self, list, portfolio):
         self.list = list
         self.strength = None
         self.threshhold = None
         self.portfolio = portfolio
-        self.max_trade = portfolio/20  # maybe the one division matters :p
+        self.max_trade = portfolio / 20  # maybe the one division matters :p
         self.cur_date_hist = self.weekend_check() + relativedelta(days=+1)
         self.cur_date = self.weekend_check()
         self.data = None
-        self.stock_dict ={}
+        self.stock_dict = {}
         self.figures = {}
 
     def weekend_check(self):
@@ -148,9 +100,10 @@ class OPAlgorithms:
 
     def analyze_pruned_list(self):
         for val in range(len(self.list)):
-            stock = Stock(self.list[val])
-            self.stock_dict[self.list[val]] = self.compare_sma(self.sma(stock,21),self.sma(stock,13))
+            stock = st.Stock(self.list[val])
+            self.stock_dict[self.list[val]] = self.compare_sma(self.sma(stock, 21), self.sma(stock, 13))
         return self.stock_dict
+
     def macd(self, ticker):
         ewm_12 = self.ewm_full_data(ticker,26,12)
         ewm_26 = self.ewm_full_data(ticker,26,26)
@@ -161,39 +114,9 @@ class OPAlgorithms:
         # df = np.multiply(df, 100)
         print(ticker.ticker)
         print(df)
-
-
         return df
 
-    def data_plot(self):
 
-        for val in range(len(self.list)):
-            stock = Stock(self.list[val])
-            db = stock.historical_data(20)
-            start_date= db.index.min()
-            avg_long = self.sma_full_data(stock, 100, 50)
-            avg_long = avg_long.truncate(before = start_date)
-
-            avg_short = self.sma_full_data(stock, 100, 5)
-            avg_short = avg_short.truncate(before = start_date)
-
-            evm_short = self.ewm_full_data(stock,365,3)
-            evm_short = evm_short.truncate(before=start_date)
-            mac = self.macd(stock)
-            mac = mac.truncate(before=start_date)
-            volume = self.volume_data(stock,365)
-            db = db.drop(columns=["open","volume","high", "low"])
-
-
-            result = pd.concat([db,avg_long,avg_short,evm_short], axis = 1, join='outer')
-
-            fig,(ax1,ax2) = plt.subplots(2,sharex = True)
-            result.plot(ax =ax1)
-            mac.plot(ax = ax2,label='MACD')
-            # plt.plot(ax = ax2, y=0)
-            ax1.set_title(stock.ticker)
-            plt.legend(loc='best')
-            plt.show()
 
 
 
@@ -208,27 +131,9 @@ pd.set_option("display.max_rows",100)
 # print(a.analyze_pruned_list)
 # ua = Stock('HRC')
 # ub = Stock('COTY')
-uc = Stock('UA')
+# uc = st.Stock('UA')
 # stocks = [ua,ub,uc]
-stockies = ["XPO","OPK","UMICY"]
-c = OPAlgorithms(stockies, 200)
-c.data_plot()
+stockies = ["XPO", "OPK", "UMICY"]
+# c = OPAlgorithms(stockies, 200)
+# c.data_plot()
 # print(a.sma(ua ,20).to_string)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
