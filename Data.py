@@ -7,6 +7,7 @@ from pandas import DataFrame
 import requests
 from pyllist import sllist
 from dateutil.relativedelta import relativedelta
+import matplotlib.pyplot as plt
 
 
 class Stock:
@@ -103,6 +104,8 @@ class OPAlgorithms:
         self.cur_date = self.weekend_check()
         self.data = None
         self.stock_dict ={}
+        self.figures = {}
+
     def weekend_check(self):
         date = datetime.date(datetime.now())
         if date.weekday() ==5:
@@ -111,12 +114,30 @@ class OPAlgorithms:
             return datetime.date(datetime.now()) + relativedelta(days=-2)
         return date
 
-    def sma(self, ticker, period_days):
+    def sma(self, ticker, period_days, window):
         self.data = ticker.historical_data(period_days)
-        self.data["Simple Moving Average"] = self.data['close'].rolling(window=period_days//2).mean().fillna('')
+        self.data["Simple Moving Average"] = self.data['close'].rolling(window= window).mean().fillna('')
         self.data = self.data.tail(1)
         self.data = self.data.iloc[:, -1]
         self.data = float(self.data.to_string(index=False))
+        return self.data
+    def sma_full_data(self, ticker, period_days , window):
+        self.data = ticker.historical_data(period_days+1000)
+        self.data["Simple Moving Average " + str(window) +" days"] = self.data['close'].rolling(
+            window= window).mean().fillna('')
+        self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
+
+        return self.data
+    def ewm_full_data(self,ticker,period_days,span):
+        self.data = ticker.historical_data(period_days)
+        self.data["EWA " + str(span) + " days"] = self.data.ewm(span=span)['close'].mean().fillna('-')
+        self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
+
+        return self.data
+
+    def volume_data(self,ticker,period_days):
+        self.data = ticker.historical_data(period_days)
+        self.data = self.data.drop(columns=["open", "high", "low", "close"])
         return self.data
 
     def compare_sma(self, long_sma, short_sma):
@@ -130,24 +151,69 @@ class OPAlgorithms:
             stock = Stock(self.list[val])
             self.stock_dict[self.list[val]] = self.compare_sma(self.sma(stock,21),self.sma(stock,13))
         return self.stock_dict
+    def macd(self, ticker):
+        ewm_12 = self.ewm_full_data(ticker,26,12)
+        ewm_26 = self.ewm_full_data(ticker,26,26)
+
+        df = DataFrame
+
+        df= np.subtract(ewm_12["EWA 12 days"], ewm_26["EWA 26 days"])
+        df = np.multiply(df, 100)
+
+        return df
+
+    def data_plot(self):
+
+        for val in range(len(self.list)):
+            stock = Stock(self.list[val])
+            db = stock.historical_data(20)
+            start_date= db.index.min()
+            avg_long = self.sma_full_data(stock, 100, 50)
+            avg_long = avg_long.truncate(before = start_date)
+
+            avg_short = self.sma_full_data(stock, 100, 5)
+            avg_short = avg_short.truncate(before = start_date)
+
+            evm_short = self.ewm_full_data(stock,365,3)
+            evm_short = evm_short.truncate(before=start_date)
+
+            volume = self.volume_data(stock,365)
+            print(volume)
+            db = db.drop(columns=["open","volume","high", "low"])
+
+            ax = db.plot()
+            ab = avg_short.plot(ax=ax)
+            ag = evm_short.plot(ax=ab)
+            ap = avg_long.plot(ax=ag)
+
+
+            # ax2 = ap.twinx()
+            # ax2.plot(volume)
+            # ax2.set_ylabel("volume(k)")
+
+
+            plt.legend(loc='best')
+            plt.show()
 
 
 
 
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
-pd.set_option("display.max_rows",30)
-b = DataCollection(200)
-b = b.list_to_frame()
+pd.set_option("display.max_rows",100)
+# b = DataCollection(200)
+# b = b.list_to_frame()
 # b= DataFrame
-a = OPAlgorithms(b, 200)
-print(a.analyze_pruned_list())
-# ua = Stock('AMD')
+# a = OPAlgorithms(b, 200)
+# a.data_plot()
+# ua = Stock('HRC')
 # ub = Stock('COTY')
-# uc = Stock('UA')
+uc = Stock('UA')
 # stocks = [ua,ub,uc]
-# stockies = ["AMD","UA","COTY"]
-# c = OPAlgorithms(stockies, 200)
+stockies = ["XPO","OPK","UMICY"]
+c = OPAlgorithms(stockies, 200)
+print(c.macd(uc))
+c.data_plot()
 # print(c.analyze_pruned_list())
 # print(a.sma(ua ,20).to_string)
 
