@@ -1,4 +1,3 @@
-from Linked_List import Linked_List
 import csv
 from yahoo_fin import stock_info as si
 import pandas as pd
@@ -6,7 +5,6 @@ import numpy as np
 import yfinance as yf
 from pandas import DataFrame
 import requests
-from pyllist import sllist
 
 
 class Stock:
@@ -77,6 +75,8 @@ class DataCollection:
                                               'EMA 1 Month', 'SMA 1 Month','EMA 1 Week', 'SMA 1 Week'])
         return self.frame
 
+    def get_historic_data(ticker):
+        
 
     # def data_to_stocks(self):
     #     stocks = DataFrame()
@@ -85,20 +85,3 @@ pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 a = DataCollection(200) # change this for diff values :p
 print(a.list_to_frame())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -76,7 +76,7 @@ def putPercentChange(ticker, strike):
     return percentChange
 
 ##Optimal day trade for calls is when gamma, delta, volume is highest, theta is lowest, returns optimal STRIKE price
-def optimalDayTradeCall(ticker, date):
+def optimalDayTradeCall(ticker, date, type):
     callChart = options.get_calls(ticker, date)
     csv = callChart.to_csv(ticker + date + '.csv')
     tickerDf = pd.read_csv(ticker + date + '.csv')
@@ -92,10 +92,51 @@ def optimalDayTradeCall(ticker, date):
     for i in keys:
         volumeDictionary[i] = int(volumeList[x])
         x += 1
-    sortedLst = sorted([value, key] for (key, value) in volumeDictionary.items())
-    rankDictionary = {}
 
-    print(sortedLst)
+
+    gammaDictionary = {}
+    gammalist = []
+    y = 0
+    for i in strikeList:
+        gammalist.append(calculateGreek(ticker, date, type, i, 'gamma'))
+    for i in keys:
+        gammaDictionary[i] = gammalist[y]
+        y += 1
+    y = 0
+
+    #print(gammaDictionary)
+
+    deltaDictionary = {}
+    deltalist = []
+    for i in strikeList:
+        deltalist.append(calculateGreek(ticker, date, type, i, 'delta'))
+    for i in keys:
+        gammaDictionary[i] = deltalist[y]
+        y += 1
+    y = 0
+
+    #print(gammaDictionary)
+
+    thetadictionary = {}
+    thetalist = []
+    for i in strikeList:
+        thetalist.append(calculateGreek(ticker, date, type, i, 'theta'))
+    for i in keys:
+        thetadictionary[i] = thetalist[y]
+        y += 1
+    y = 0
+
+    #print(thetadictionary)
+
+    gammaOrderedDict = {k: v for k, v in sorted(gammaDictionary.items(), key=lambda item: item[1])}
+    volumeOrderedDict = {k: v for k, v in sorted(volumeDictionary.items(), key=lambda item: item[1])}
+    deltaOrderedDict = {k: v for k, v in sorted(deltaDictionary.items(), key=lambda item: item[1])}
+
+    thetaOrderedDict = {k: v for k, v in sorted(thetadictionary.items(), key=lambda item: item[1])}
+
+
+
+
 
 
 
@@ -166,7 +207,7 @@ def getOptionExpirationDates(ticker):
     return expireyLst
 
 
-def calculateGreeks(ticker, date, type, strike):
+def calculateAllGreeks(ticker, date, type, strike):
         S = si.get_live_price(ticker)
         K = strike
         sigma = calculateAnnualizedVolatility(ticker)
@@ -181,7 +222,31 @@ def calculateGreeks(ticker, date, type, strike):
         thta = theta(flag, S, K, t, r, sigma)
         vga = vega(flag, S, K, t, r, sigma)
         rh = rho(flag, S, K, t, r, sigma)
-        print({"delta": dlta, "gamma": gam, "theta": thta, "vega": vga, "rho": rh})
+        return ({"delta": dlta, "gamma": gam, "theta": thta, "vega": vga, "rho": rh})
+
+def calculateGreek(ticker, date, type, strike, greek):
+        grk = 0
+        S = si.get_live_price(ticker)
+        K = strike
+        sigma = calculateAnnualizedVolatility(ticker)
+        t = optionExpiration(date)
+        r = calculateTreasuryYield(date)
+        flag = ''
+        if type == 'Call' or type == "call" or type == "C" or type == 'c':
+            flag = 'c'
+        flag = 'p'
+        if greek == "Delta" or greek == "delta":
+            grk = delta(flag, S, K, t, r, sigma)
+        elif greek == "Gamma" or greek == "gamma":
+            grk = gamma(flag, S, K, t, r, sigma)
+        elif greek == "Theta" or greek == "theta":
+            grk = theta(flag, S, K, t, r, sigma)
+        elif greek == "Vega" or greek == "vega":
+            grk = vega(flag, S, K, t, r, sigma)
+        else:
+            grk = rho(flag, S, K, t, r, sigma)
+        return grk
+
 
 def calculateTreasuryYield(expirationDate):
     #add case when date is not in table (i.e. gdate is a weekend)
@@ -238,7 +303,7 @@ def plotClosingPricesAndAnnualizedVolatility(ticker):
 #calculateGreeks('ge', '2021-01-15', 'call', 12)
 #calculateAnnualizedVolatility('bac')
 
-
+optimalDayTradeCall('ge', '2021-01-15', 'call')
 
 
 #converts one type of date to another
