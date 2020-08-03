@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="4f5f7ca1-6db1-4cd1-a829-1a2a2e6ffd1c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Stock.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataPlt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataPlt.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataPlt.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,6 +163,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.Data" />
+      <item itemvalue="Python.Stock" />
+      <item itemvalue="Python.dataPlt" />
+      <item itemvalue="Python.dataPlt (1)" />
+      <item itemvalue="Python.UI" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.dataPlt (1)" />
@@ -153,7 +179,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -183,6 +209,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="we added macd ewm and visualization" />
     <option name="LAST_COMMIT_MESSAGE" value="we added macd ewm and visualization" />
@@ -205,30 +234,30 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2660" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596332702346" />
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1596410066917">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="267" key="GridCell.Tab.0.bottom" timestamp="1596414548608">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596410066917" />
     <state width="1899" height="187" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
-    <state width="1899" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1596410066917">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="267" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1596414548608" />
+    <state width="1899" height="267" key="GridCell.Tab.0.center" timestamp="1596414548608">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596410066917" />
     <state width="1899" height="187" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
-    <state width="1899" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1596410066917">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="267" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1596414548608" />
+    <state width="1899" height="267" key="GridCell.Tab.0.left" timestamp="1596414548607">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596410066917" />
     <state width="1899" height="187" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312821" />
-    <state width="1899" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1596410066917">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="267" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1596414548607" />
+    <state width="1899" height="267" key="GridCell.Tab.0.right" timestamp="1596414548608">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596410066917" />
     <state width="1899" height="187" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
-    <state width="1899" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
+    <state width="1899" height="267" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1596414548608" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1596333873507">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
