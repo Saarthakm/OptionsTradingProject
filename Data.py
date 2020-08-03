@@ -7,9 +7,9 @@ from pandas import DataFrame
 import requests
 from pyllist import sllist
 from dateutil.relativedelta import relativedelta
+# from py_vollib.black_scholes.greeks.analytical import
 import matplotlib.pyplot as plt
 import Stock as st
-import tulipy as ti
 
 class DataCollection:
     def __init__(self, portfolio):
@@ -112,16 +112,17 @@ class data_indicators:
         return self.stock_dict
 
     def macd(self, ticker):
-        ewm_12 = self.ewm_full_data(ticker,26,12)
-        ewm_26 = self.ewm_full_data(ticker,26,26)
+        ewm_12 = self.ewm_full_data(ticker, 365, 12)  # change period to param probably
+        ewm_26 = self.ewm_full_data(ticker, 365, 26)
 
         df = DataFrame
 
-        df= np.subtract(ewm_12["EWA 12 days"], ewm_26["EWA 26 days"])
+        df = np.subtract(ewm_12["EWA 12 days"], ewm_26["EWA 26 days"])
         # df = np.multiply(df, 100)
         print(ticker.ticker)
         print(df)
         return df
+
     def compute_rsi(self, ticker, timewindow):
         ticker = st.Stock(ticker)
         datum = ticker.historical_data(20)
