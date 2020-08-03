@@ -9,6 +9,7 @@ from pyllist import sllist
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import Stock as st
+import tulipy as ti
 
 class DataCollection:
     def __init__(self, portfolio):
@@ -78,8 +79,14 @@ class data_indicators:
         self.data["Simple Moving Average " + str(window) +" days"] = self.data['close'].rolling(
             window= window).mean().fillna('')
         self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
-
         return self.data
+
+    def volumetric_sma(self, ticker, period, window):
+        volume_data= self.volume_data(ticker, period)
+        volume_data[str(window) + " day volumetric SMA"] = volume_data.rolling(window=window).mean().fillna('')
+        volume_data = volume_data.drop(columns=["volume"])
+        return volume_data
+
     def ewm_full_data(self,ticker,period_days,span):
         self.data = ticker.historical_data(period_days)
         self.data["EWA " + str(span) + " days"] = self.data.ewm(span=span)['close'].mean().fillna('-')
@@ -115,12 +122,45 @@ class data_indicators:
         print(ticker.ticker)
         print(df)
         return df
+    def compute_rsi(self, ticker, timewindow):
+        ticker = st.Stock(ticker)
+        datum = ticker.historical_data(20)
+        close = datum["close"]
+        delta = close.diff(1).dropna()
+        up_chg = 0 *delta
+        down_chg = 0*delta
+        up_chg[delta>0]=delta[delta>0]
+        down_chg[delta < 0] = delta[delta<0]
+        up_chg_avg = up_chg.ewm(span=timewindow).mean()
+        down_chg_avg = down_chg.ewm(span=timewindow).mean()
+        # up_chg_avg = up_chg.rolling(window=timewindow).mean()
+        # down_chg_avg = down_chg.rolling(window=timewindow).mean()
+        rs = abs(up_chg_avg/down_chg_avg)
+        rsi = 100-(100/(1+rs))
+        return rsi
+    def volume_oscillator(self, ticker):
+        df1 = self.volumetric_sma(ticker, 500, 28)
+        df2 = self.volumetric_sma(ticker, 500, 14)
+        df1=df1.drop(columns=["ticker"])
+        df2= df2.drop(columns=["ticker"])
+        df2["14 day volumetric SMA"] = pd.to_numeric(df2["14 day volumetric SMA"], errors='coerce')
+        df1["28 day volumetric SMA"] = pd.to_numeric(df1["28 day volumetric SMA"], errors='coerce')
+        df = DataFrame
+        df = np.subtract(df2["14 day volumetric SMA"], df1["28 day volumetric SMA"])
+        df = df.dropna()
+        # df2 = df2.drop(columns=['ticker'])
+        # d3 = pd.concat([df1, df2], axis=1, join='outer')
+        # d3=d3.tail(1)
+        # d3 = DataFrame
+        # d3 = np.subtract(df2["14 day volumetric SMA"], df1["28 day volumetric SMA"])
+        return df
 
 
 
 
 
 
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows",100)
@@ -130,10 +170,12 @@ pd.set_option("display.max_rows",100)
 # a = OPAlgorithms(b, 200)
 # print(a.analyze_pruned_list)
 # ua = Stock('HRC')
-# ub = Stock('COTY')
+ub = st.Stock('AMD')
 # uc = st.Stock('UA')
 # stocks = [ua,ub,uc]
 stockies = ["XPO", "OPK", "UMICY"]
+x = data_indicators(stockies, 200)
+print(x.volume_oscillator(ub))
 # c = OPAlgorithms(stockies, 200)
 # c.data_plot()
 # print(a.sma(ua ,20).to_string)
