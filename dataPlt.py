@@ -15,7 +15,7 @@ from Data import data_indicators as di
 
 class DataPlt:
     def __init__(self):
-        self.stock_list = ["XPO", "OPK", "UMICY"]
+        self.stock_list = ["AMZN", "OPK", "UMICY"]
 
     def plot(self):
         for val in range(len(self.stock_list)):
