@@ -10,35 +10,36 @@ from dateutil.relativedelta import relativedelta
 # from py_vollib.black_scholes.greeks.analytical import
 import matplotlib.pyplot as plt
 import Stock as st
-
+import list
 class DataCollection:
     def __init__(self, portfolio):
-        self.tickers = None
+        self.tickers = list.stock_list
 
         self.portfolio = portfolio
         self.max_trade = self.portfolio/20
         self.stockPrice = 0
         self.list = []
     def list_to_frame(self):
-        self.tickers = si.tickers_sp500()
+
         for val in range(len(self.tickers)):
             z = self.tickers[val]
-
-         #token would be BKB.B but neeeded to be BKB-B and replace method wasn't working so hard coded it
-            if "." in z:
-                q = ""
-                for i in z:
-                    if i == ".":
-                        i = "-"
-                    q += i
-                    z = q
-            stock = st.Stock(z)
-            price = stock.get_price()
-
-            if price < self.max_trade:
-                # data = stock.day_data()
-                self.list.append(z)
-
+            try:
+                # token would be BKB.B but neeeded to be BKB-B and replace method wasn't working so hard coded it
+                if "." in z:
+                    q = ""
+                    for i in z:
+                        if i == ".":
+                            i = "-"
+                        q += i
+                        z = q
+                stock = st.Stock(z)
+                price = stock.get_price()
+                print(val)
+                if price < self.max_trade and price > 3:
+                    # data = stock.day_data()
+                    self.list.append(z)
+            except AssertionError:
+                print(z)
         return self.list
 
     def stock_create(self, tick):
@@ -87,20 +88,26 @@ class data_indicators:
         volume_data = volume_data.drop(columns=["volume"])
         return volume_data
 
-    def ewm_full_data(self,ticker,period_days,span):
+    def ewm_full_data(self, ticker, period_days, span):
         self.data = ticker.historical_data(period_days)
         self.data["EWA " + str(span) + " days"] = self.data.ewm(span=span)['close'].mean().fillna('-')
         self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
 
         return self.data
 
-    def volume_data(self,ticker,period_days):
+    def dataframe_short_float(self, data):
+        data = data.tail(1)
+        data = data.iloc[:, -1]
+        data = float(data.to_string(index=False))
+        return data
+
+    def volume_data(self, ticker, period_days):
         self.data = ticker.historical_data(period_days)
         self.data = self.data.drop(columns=["open", "high", "low", "close"])
         return self.data
 
     def compare_sma(self, long_sma, short_sma):
-        if long_sma<short_sma:
+        if long_sma < short_sma:
             return True
         else:
             return False
@@ -112,12 +119,12 @@ class data_indicators:
         return self.stock_dict
 
     def macd(self, ticker):
-        ewm_12 = self.ewm_full_data(ticker, 365, 12)  # change period to param probably
-        ewm_26 = self.ewm_full_data(ticker, 365, 26)
+        ewm_12 = self.ewm_full_data(ticker, 365, 10)  # change period to param probably
+        ewm_26 = self.ewm_full_data(ticker, 365, 22)
 
         df = DataFrame
 
-        df = np.subtract(ewm_12["EWA 12 days"], ewm_26["EWA 26 days"])
+        df = np.subtract(ewm_12["EWA 10 days"], ewm_26["EWA 22 days"])
         # df = np.multiply(df, 100)
         print(ticker.ticker)
         print(df)
@@ -206,8 +213,9 @@ ub = st.Stock('AMD')
 # stocks = [ua,ub,uc]
 stockies = ["XPO", "OPK", "UMICY"]
 b = data_indicators(stockies, 200)
+c = DataCollection(500)
+print(c.list_to_frame())
 
-print(b.avg_vix_roc())
 # c = OPAlgorithms(stockies, 200)
 # c.data_plot()
 # print(a.sma(ua ,20).to_string)
