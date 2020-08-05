@@ -125,29 +125,31 @@ class data_indicators:
 
     def compute_rsi(self, ticker, timewindow):
         ticker = st.Stock(ticker)
-        datum = ticker.historical_data(20)
+        datum = ticker.historical_data(365)
         close = datum["close"]
         delta = close.diff(1).dropna()
-        up_chg = 0 *delta
-        down_chg = 0*delta
-        up_chg[delta>0]=delta[delta>0]
-        down_chg[delta < 0] = delta[delta<0]
-        up_chg_avg = up_chg.ewm(span=timewindow).mean()
-        down_chg_avg = down_chg.ewm(span=timewindow).mean()
-        # up_chg_avg = up_chg.rolling(window=timewindow).mean()
-        # down_chg_avg = down_chg.rolling(window=timewindow).mean()
-        rs = abs(up_chg_avg/down_chg_avg)
-        rsi = 100-(100/(1+rs))
+        up_chg = 0 * delta
+        down_chg = 0 * delta
+        up_chg[delta > 0] = delta[delta > 0]
+        down_chg[delta < 0] = delta[delta < 0]
+        # up_chg_avg = up_chg.ewm(span=timewindow).mean()
+        # down_chg_avg = down_chg.ewm(span=timewindow).mean()
+        up_chg_avg = up_chg.rolling(window=timewindow).mean()
+        down_chg_avg = down_chg.rolling(window=timewindow).mean()
+        rs = abs(up_chg_avg / down_chg_avg)
+        rsi = 100 - (100 / (1 + rs))
         return rsi
     def volume_oscillator(self, ticker):
         df1 = self.volumetric_sma(ticker, 500, 28)
         df2 = self.volumetric_sma(ticker, 500, 14)
-        df1=df1.drop(columns=["ticker"])
-        df2= df2.drop(columns=["ticker"])
+        df1 = df1.drop(columns=["ticker"])
+        df2 = df2.drop(columns=["ticker"])
         df2["14 day volumetric SMA"] = pd.to_numeric(df2["14 day volumetric SMA"], errors='coerce')
         df1["28 day volumetric SMA"] = pd.to_numeric(df1["28 day volumetric SMA"], errors='coerce')
         df = DataFrame
         df = np.subtract(df2["14 day volumetric SMA"], df1["28 day volumetric SMA"])
+        # df = np.divide(df, df1["28 day volumetric SMA"])
+        # df = np.multiply(df, 100)
         df = df.dropna()
         # df2 = df2.drop(columns=['ticker'])
         # d3 = pd.concat([df1, df2], axis=1, join='outer')
@@ -156,16 +158,44 @@ class data_indicators:
         # d3 = np.subtract(df2["14 day volumetric SMA"], df1["28 day volumetric SMA"])
         return df
 
+    def vix_roc(self, number_days):
+        vix = st.Stock("^VIX")
+        data = si.get_data("^VIX", self.cur_date + relativedelta(days=-(number_days + 22)),
+                           self.cur_date + relativedelta(days=-number_days))
+        data.drop(columns=["adjclose", "open", "low", "high", "volume"])
+        data["VIX EMA"] = data.ewm(span=22)['close'].mean().fillna('-')
+        data1 = si.get_data("^VIX", self.cur_date + relativedelta(days=-number_days), self.cur_date)
+        data1.drop(columns=["adjclose", "open", "low", "high", "volume"])
+        data1["VIX EMA"] = data1.ewm(span=22)['close'].mean().fillna('-')
+        data1 = data1.tail(1)
+        data1 = data1.iloc[:, -1]
+        data1_float = float(data1.to_string(index=False))
 
+        data = data.tail(1)
+        data = data.iloc[:, -1]
+        data_float = float(data.to_string(index=False))
+        data2 = ((data1_float / data_float) - 1) * 100
 
+        return data2
 
+    def avg_vix_roc(self):
+        list = []
+        for i in range(22, 1, -1):
+            list.append(self.vix_roc(i))
+
+        df = DataFrame(list, columns=["AVG ROCS"])
+        df["AVG"] = df.ewm(span=21)["AVG ROCS"].mean()
+        df = df.tail(1)
+        df = df.iloc[:, -1]
+        df = float(df.to_string(index=False))
+        return df
 
 
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows",100)
-# b = DataCollection(200)
+
 # b = b.list_to_frame()
 #  b= DataFrame
 # a = OPAlgorithms(b, 200)
@@ -175,8 +205,9 @@ ub = st.Stock('AMD')
 # uc = st.Stock('UA')
 # stocks = [ua,ub,uc]
 stockies = ["XPO", "OPK", "UMICY"]
-x = data_indicators(stockies, 200)
-print(x.volume_oscillator(ub))
+b = data_indicators(stockies, 200)
+
+print(b.avg_vix_roc())
 # c = OPAlgorithms(stockies, 200)
 # c.data_plot()
 # print(a.sma(ua ,20).to_string)
