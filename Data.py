@@ -7,7 +7,6 @@ from pandas import DataFrame
 import requests
 from pyllist import sllist
 from dateutil.relativedelta import relativedelta
-# from py_vollib.black_scholes.greeks.analytical import
 import matplotlib.pyplot as plt
 import Stock as st
 import list
@@ -42,9 +41,7 @@ class DataCollection:
                 print(z)
         return self.list
 
-    def stock_create(self, tick):
-        s = st.Stock(tick)
-        return s
+
 
 
 class data_indicators:
@@ -62,21 +59,26 @@ class data_indicators:
 
     def weekend_check(self):
         date = datetime.date(datetime.now())
-        if date.weekday() ==5:
-            return datetime.date(datetime.now()) +relativedelta(days=-1)
-        if date.weekday() ==6:
+        if date.weekday() == 5:
+            return datetime.date(datetime.now()) + relativedelta(days=-1)
+        if date.weekday() == 6:
             return datetime.date(datetime.now()) + relativedelta(days=-2)
         return date
 
+    def stock_create(self, tick):
+        s = st.Stock(tick)
+        return s
+
     def sma(self, ticker, period_days, window):
         self.data = ticker.historical_data(period_days)
-        self.data["Simple Moving Average"] = self.data['close'].rolling(window= window).mean().fillna('')
+        self.data["Simple Moving Average"] = self.data['close'].rolling(window=window).mean().fillna('')
         self.data = self.data.tail(1)
         self.data = self.data.iloc[:, -1]
         self.data = float(self.data.to_string(index=False))
         return self.data
-    def sma_full_data(self, ticker, period_days , window):
-        self.data = ticker.historical_data(period_days+1000)
+
+    def sma_full_data(self, ticker, period_days, window):
+        self.data = ticker.historical_data(period_days + 1000)
         self.data["Simple Moving Average " + str(window) +" days"] = self.data['close'].rolling(
             window= window).mean().fillna('')
         self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
@@ -126,8 +128,7 @@ class data_indicators:
 
         df = np.subtract(ewm_12["EWA 10 days"], ewm_26["EWA 22 days"])
         # df = np.multiply(df, 100)
-        print(ticker.ticker)
-        print(df)
+
         return df
 
     def compute_rsi(self, ticker, timewindow):
@@ -197,12 +198,55 @@ class data_indicators:
         df = float(df.to_string(index=False))
         return df
 
+    def stock_check(self, ticker):
+        buy = True
+        stock = self.stock_create(ticker)
+        price = si.get_live_price(ticker)
+        x = self.ewm_full_data(stock, 10, 10)
+        x = x.tail(1)
+        x = x.iloc[:, -1]
+        x = float(x.to_string(index=False))
+
+        macd = self.macd(stock)
+        signal = macd.ewm(span=9).mean().fillna('-')
+        macd = macd.tail(1)
+        signal = signal.tail(1)
+        signal = float(signal.to_string(index=False))
+        macd = float(macd.to_string(index=False))
+
+        if x < price:
+            buy = False
+        if macd < signal:
+            buy = False
+        return buy
+
+    def sell(self):
+        if self.stock_check():
+            return False
+        else:
+            return True
+
 
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
-pd.set_option("display.max_rows",100)
+pd.set_option("display.max_rows", 100)
 
+stockies = []
+b = data_indicators(stockies, 200)
+c = DataCollection(500)
+i = 1
+for val in list.stock_list:
+    try:
+        if b.stock_check(val):
+            stockies.append(val)
+        print(i)
+        i += 1
+    except AssertionError:
+        print(val)
+    except KeyError:
+        print(val)
+print(stockies)
 # b = b.list_to_frame()
 #  b= DataFrame
 # a = OPAlgorithms(b, 200)
@@ -211,10 +255,6 @@ pd.set_option("display.max_rows",100)
 ub = st.Stock('AMD')
 # uc = st.Stock('UA')
 # stocks = [ua,ub,uc]
-stockies = ["XPO", "OPK", "UMICY"]
-b = data_indicators(stockies, 200)
-c = DataCollection(500)
-print(c.list_to_frame())
 
 # c = OPAlgorithms(stockies, 200)
 # c.data_plot()

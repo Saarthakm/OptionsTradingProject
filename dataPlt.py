@@ -15,14 +15,14 @@ from Data import data_indicators as di
 
 class DataPlt:
     def __init__(self):
-        self.stock_list = ["AMZN", "OPK", "UMICY"]
+        self.stock_list = ["ATTO", "OPK", "UMICY"]
 
     def plot(self):
         for val in range(len(self.stock_list)):
             stock = dc(200)
             x = di(self.stock_list, 200)
             stock = dc.stock_create(stock, self.stock_list[val])
-            db = stock.historical_data(365)
+            db = stock.historical_data(20)
             start_date = db.index.min()
             avg_long = di.sma_full_data(stock, stock, 100, 50)
             avg_long = avg_long.truncate(before=start_date)

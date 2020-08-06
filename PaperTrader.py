@@ -41,13 +41,14 @@ async def on_trade_updates(conn, channel, trade):
     if 'partial_fill' in trade.event:
         trades.append([trade.order['updated_at'], trade.order['symbol'], trade.order['side'],
                        trade['price'], trade.order['filled_qty'], trade.order['filled_avg_price']])
-        with open('past_trades.csv', 'w') as f:
-            json.dump(trades, f, indent=4)
+
+        with open('partial_trades.csv', 'w') as f:
+            json.dump(partial_trades, f, indent=4)
     if 'fill' in trade.event:
         partial_trades.append([trade.order['updated_at'], trade.order['symbol'], trade.order['side'],
                                trade.order['filled_qty'], trade.order['filled_avg_price']])
-        with open('partial_trades.csv', 'w') as f:
-            json.dump(partial_trades, f, indent=4)
+        with open('past_trades.csv', 'w') as f:
+            json.dump(trades, f, indent=4)
     # if 'done_for_the_day' in trade.event:
     # maybe set something true here
     if 'new' in trade.event:
