@@ -36,7 +36,7 @@ class SmaCross(Strategy):
 
 
 # api error causes nones use try catch
-for val in list.list_through_algo:
+for val in list.test_pruned_list:
     hist_data = st.Stock(val).historical_data(30)
     hist_data = hist_data.drop(columns=["ticker"])
     hist_data = hist_data.rename(

@@ -1,5 +1,5 @@
 from datetime import datetime
-import csv
+from scipy import stats
 from yahoo_fin import stock_info as si
 import pandas as pd
 import numpy as np
@@ -12,7 +12,7 @@ import Stock as st
 import list
 class DataCollection:
     def __init__(self, portfolio):
-        self.tickers = list.stock_list
+        self.tickers = list.stock_list1
 
         self.portfolio = portfolio
         self.max_trade = self.portfolio/20
@@ -203,12 +203,11 @@ class data_indicators:
         return df
 
     def stock_check(self):
+        dic = {}
         buy = True
         index = self.org_period - self.period
         stock = self.stock_create(self.ticker)
         # price = si.get_live_price(self.ticker)
-        print(self.period)
-        print(self.org_period)
         data = stock.historical_data(self.org_period)
         data = data.drop(columns={'ticker', 'open', 'high', 'low', 'volume'})
         data = data.to_numpy()
@@ -222,7 +221,10 @@ class data_indicators:
         emw_price = x[index]
         macd = self.macd(stock)
         signal = macd.ewm(span=9).mean().fillna('-')
-
+        x = [0, 1]
+        y = [macd[len(macd) - 2], macd[len(macd)]]
+        z = stats.linregress(x, y)
+        print(z)
         macd = macd.to_numpy()
         signal = signal.to_numpy()
 
@@ -231,11 +233,14 @@ class data_indicators:
         # signal = float(signal.to_string(index=False))
         # macd = float(macd.to_string(index=False))
         self.period -= 1
+        if len(macd) < 10:
+            buy = False
+        else:
+            if emw_price < price:  # possibly add hour data for more accurate
+                buy = False
+            if macd[index + 9] < signal[index + 8]:  # maybe look into this more macd span. yer yeet!
+                buy = False
 
-        if emw_price < price:
-            buy = False
-        if macd[index + 10] < signal[index + 10]:
-            buy = False
         return buy
 
     def sell_stock(self):
@@ -251,12 +256,14 @@ pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows", 100)
 
 # stockies = []
-# b = data_indicators(stockies, 200)
-# c = DataCollection(500)
+# b = DataCollection(500)
+# c = list.list_through_algo
+#
 # i = 1
-# for val in list.stock_list:
+# for val in c:
+#     b = data_indicators(c, 500, val, 1)
 #     try:
-#         if b.stock_check(val):
+#         if b.stock_check():
 #             stockies.append(val)
 #         print(i)
 #         i += 1
@@ -265,9 +272,8 @@ pd.set_option("display.max_rows", 100)
 #     except KeyError:
 #         print(val)
 # print(stockies)
-# b = b.list_to_frame()
-#  b= DataFrame
-# a = OPAlgorithms(b, 200)
+
+
 # print(a.analyze_pruned_list)
 # ua = Stock('HRC')
 # ub = st.Stock('AMD')
