@@ -220,13 +220,18 @@ class data_indicators:
         x = x.to_numpy()
         # x = float(x.to_string(index=False))
         emw_price = x[index]
+        diff = emw_price - price
+        percent = (diff / emw_price) * 100
         macd = self.macd(stock)
         signal = macd.ewm(span=9).mean().fillna('-')
         x = [0, 1]
         y = [macd[len(macd) - 2], macd[len(macd) - 1]]
         slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
         z = slope
-        print(z)
+        if z < 0:
+            strength = percent * -1
+        else:
+            strength = percent
 
         macd = macd.to_numpy()
         signal = signal.to_numpy()
@@ -243,7 +248,8 @@ class data_indicators:
                 buy = False
             if macd[index + 9] < signal[index + 8]:  # maybe look into this more macd span. yer yeet!
                 buy = False
-
+        if buy:
+            dict = {self.ticker: strength}
         return buy
 
     def sell_stock(self):
