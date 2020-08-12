@@ -30,7 +30,7 @@ class MultiLinearRegression:
         return self.live_price
 
     def get_historic_data(ticker):
-            self.data = si.get_data(ticker, start_date=self.startdate, end_date=self.enddate, index_as_date = False)
+            self.data = si.get_data(ticker, start_date=self.startdate, end_date=self.enddate, index_as_date=False)
             return self.data
 
     def crossValidation(self):

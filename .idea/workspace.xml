@@ -19,15 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7e71e928-d09d-4ede-a267-b99ab87833a8" name="Default Changelist" comment="Added rate of change for VIX a volatility index and then got average rate of change.">
-      <change beforePath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="7e71e928-d09d-4ede-a267-b99ab87833a8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/backtester.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OPalgorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/OPalgorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/PaperTrader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MultiRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/MultiRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataPlt.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataPlt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/list.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +56,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.Data">
+  <component name="RunManager" selected="Python.backtester">
     <configuration name="Data" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="OptionsTradingProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,7 +120,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Stock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="backtester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OptionsTradingProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -135,7 +132,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stock.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/backtester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,18 +186,18 @@
     <list>
       <item itemvalue="Python.Data" />
       <item itemvalue="Python.Paper_trader_with_vix" />
-      <item itemvalue="Python.Stock" />
       <item itemvalue="Python.dataPlt (1)" />
       <item itemvalue="Python.list" />
       <item itemvalue="Python.OPalgorithms" />
+      <item itemvalue="Python.backtester" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.backtester" />
+        <item itemvalue="Python.dataPlt (1)" />
         <item itemvalue="Python.OPalgorithms" />
         <item itemvalue="Python.list" />
         <item itemvalue="Python.Paper_trader_with_vix" />
-        <item itemvalue="Python.dataPlt (1)" />
-        <item itemvalue="Python.Stock" />
       </list>
     </recent_temporary>
   </component>
@@ -239,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596594986834</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added rate of change for VIX a volatility index and then got average rate of change.">
+      <created>1596757484551</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1596757484551</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -251,7 +255,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="we added macd ewm and visualization" />
     <MESSAGE value="Separated some of the classes into different files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Separated some of the classes into different files" />
+    <MESSAGE value="Added rate of change for VIX a volatility index and then got average rate of change." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added rate of change for VIX a volatility index and then got average rate of change." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -260,10 +265,10 @@
     </state>
     <state x="2334" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596331870593" />
     <state x="414" y="175" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596356166347" />
-    <state x="2845" y="227" key="CommitChangelistDialog2" timestamp="1596595074101">
+    <state x="2845" y="227" key="CommitChangelistDialog2" timestamp="1596757483875">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2845" y="227" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596595074101" />
+    <state x="2845" y="227" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596757483875" />
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1596594979694">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -272,28 +277,28 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2660" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596332702346" />
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1596750365938">
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1597209570484">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596750365938" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209570484" />
     <state width="1899" height="187" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1596750365938">
+    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1597209570484">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596750365938" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209570484" />
     <state width="1899" height="187" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1596750365938">
+    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1597209570484">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596750365938" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209570484" />
     <state width="1899" height="187" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312821" />
     <state width="1899" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1596750365938">
+    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1597209570484">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596750365938" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209570484" />
     <state width="1899" height="187" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1596333873507">
@@ -312,24 +317,24 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596333873507" />
-    <state x="461" y="168" key="SettingsEditor" timestamp="1596660587935">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="2381" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596588501634" />
-    <state x="809" y="221" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596356854467" />
-    <state x="461" y="168" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1596660587935" />
-    <state x="2472" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596595088099">
+    <state x="2381" y="162" key="SettingsEditor" timestamp="1597178768203">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2472" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596595088099" />
+    <state x="2381" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597178768203" />
+    <state x="809" y="221" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596356854467" />
+    <state x="461" y="168" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1596660587935" />
+    <state x="2472" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596757498184">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2472" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596757498184" />
     <state x="2012" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1596422624313">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2012" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596422624313" />
-    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1596422329773">
+    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1596823194790">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596422329773" />
+    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596823194790" />
     <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596757457218">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

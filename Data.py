@@ -45,7 +45,7 @@ class DataCollection:
 
 
 class data_indicators:
-    def __init__(self, list, portfolio):
+    def __init__(self, list, portfolio, ticker, period):
         self.list = list
         self.strength = None
         self.threshhold = None
@@ -56,6 +56,9 @@ class data_indicators:
         self.data = None
         self.stock_dict = {}
         self.figures = {}
+        self.ticker = ticker
+        self.org_period = period
+        self.period = period
 
     def weekend_check(self):
         date = datetime.date(datetime.now())
@@ -97,6 +100,7 @@ class data_indicators:
 
         return self.data
 
+
     def dataframe_short_float(self, data):
         data = data.tail(1)
         data = data.iloc[:, -1]
@@ -121,8 +125,8 @@ class data_indicators:
         return self.stock_dict
 
     def macd(self, ticker):
-        ewm_12 = self.ewm_full_data(ticker, 365, 10)  # change period to param probably
-        ewm_26 = self.ewm_full_data(ticker, 365, 22)
+        ewm_12 = self.ewm_full_data(ticker, self.org_period + 22, 10)  # change period to param probably
+        ewm_26 = self.ewm_full_data(ticker, self.org_period + 22, 22)
 
         df = DataFrame
 
@@ -198,29 +202,43 @@ class data_indicators:
         df = float(df.to_string(index=False))
         return df
 
-    def stock_check(self, ticker):
+    def stock_check(self):
         buy = True
-        stock = self.stock_create(ticker)
-        price = si.get_live_price(ticker)
-        x = self.ewm_full_data(stock, 10, 10)
-        x = x.tail(1)
-        x = x.iloc[:, -1]
-        x = float(x.to_string(index=False))
-
+        index = self.org_period - self.period
+        stock = self.stock_create(self.ticker)
+        # price = si.get_live_price(self.ticker)
+        print(self.period)
+        print(self.org_period)
+        data = stock.historical_data(self.org_period)
+        data = data.drop(columns={'ticker', 'open', 'high', 'low', 'volume'})
+        data = data.to_numpy()
+        price = data[index]
+        x = self.ewm_full_data(stock, self.org_period + 10, 10)
+        x = x.drop(columns="ticker")
+        # x = x.tail(1)
+        # x = x.iloc[:, -1]
+        x = x.to_numpy()
+        # x = float(x.to_string(index=False))
+        emw_price = x[index]
         macd = self.macd(stock)
         signal = macd.ewm(span=9).mean().fillna('-')
-        macd = macd.tail(1)
-        signal = signal.tail(1)
-        signal = float(signal.to_string(index=False))
-        macd = float(macd.to_string(index=False))
 
-        if x < price:
+        macd = macd.to_numpy()
+        signal = signal.to_numpy()
+
+        # macd = macd.tail(1)
+        # signal = signal.tail(1)
+        # signal = float(signal.to_string(index=False))
+        # macd = float(macd.to_string(index=False))
+        self.period -= 1
+
+        if emw_price < price:
             buy = False
-        if macd < signal:
+        if macd[index + 10] < signal[index + 10]:
             buy = False
         return buy
 
-    def sell(self):
+    def sell_stock(self):
         if self.stock_check():
             return False
         else:
@@ -232,27 +250,27 @@ pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows", 100)
 
-stockies = []
-b = data_indicators(stockies, 200)
-c = DataCollection(500)
-i = 1
-for val in list.stock_list:
-    try:
-        if b.stock_check(val):
-            stockies.append(val)
-        print(i)
-        i += 1
-    except AssertionError:
-        print(val)
-    except KeyError:
-        print(val)
-print(stockies)
+# stockies = []
+# b = data_indicators(stockies, 200)
+# c = DataCollection(500)
+# i = 1
+# for val in list.stock_list:
+#     try:
+#         if b.stock_check(val):
+#             stockies.append(val)
+#         print(i)
+#         i += 1
+#     except AssertionError:
+#         print(val)
+#     except KeyError:
+#         print(val)
+# print(stockies)
 # b = b.list_to_frame()
 #  b= DataFrame
 # a = OPAlgorithms(b, 200)
 # print(a.analyze_pruned_list)
 # ua = Stock('HRC')
-ub = st.Stock('AMD')
+# ub = st.Stock('AMD')
 # uc = st.Stock('UA')
 # stocks = [ua,ub,uc]
 
