@@ -20,10 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e71e928-d09d-4ede-a267-b99ab87833a8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OptionsTradingProject.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/backtester.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/list.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +55,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.Data">
+  <component name="RunManager" selected="Python.backtester">
     <configuration name="Data" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="OptionsTradingProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,7 +98,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Paper_trader_with_vix" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Stock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="OptionsTradingProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -110,7 +110,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Paper_trader_with_vix.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stock.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,23 +184,23 @@
     </configuration>
     <list>
       <item itemvalue="Python.Data" />
-      <item itemvalue="Python.Paper_trader_with_vix" />
       <item itemvalue="Python.dataPlt (1)" />
       <item itemvalue="Python.list" />
       <item itemvalue="Python.OPalgorithms" />
       <item itemvalue="Python.backtester" />
+      <item itemvalue="Python.Stock" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.backtester" />
         <item itemvalue="Python.dataPlt (1)" />
+        <item itemvalue="Python.Stock" />
         <item itemvalue="Python.OPalgorithms" />
         <item itemvalue="Python.list" />
-        <item itemvalue="Python.Paper_trader_with_vix" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -249,7 +249,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597209829718</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added some backtesting and also some more checks for buying and selling.">
+      <created>1597265191039</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1597265191039</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -262,7 +269,8 @@
     <MESSAGE value="we added macd ewm and visualization" />
     <MESSAGE value="Separated some of the classes into different files" />
     <MESSAGE value="Added rate of change for VIX a volatility index and then got average rate of change." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added rate of change for VIX a volatility index and then got average rate of change." />
+    <MESSAGE value="added some backtesting and also some more checks for buying and selling." />
+    <option name="LAST_COMMIT_MESSAGE" value="added some backtesting and also some more checks for buying and selling." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -271,10 +279,10 @@
     </state>
     <state x="2334" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596331870593" />
     <state x="414" y="175" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596356166347" />
-    <state x="2845" y="227" key="CommitChangelistDialog2" timestamp="1597209829100">
+    <state x="2845" y="227" key="CommitChangelistDialog2" timestamp="1597265190441">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2845" y="227" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209829100" />
+    <state x="2845" y="227" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265190441" />
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1596594979694">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -283,28 +291,32 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2660" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597264745255" />
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1597265040234">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1597269393463">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265040234" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
     <state width="1899" height="187" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1597265040234">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1597269393463">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265040234" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
     <state width="1899" height="187" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1597265040234">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1597269393463">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265040234" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
     <state width="1899" height="187" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312821" />
     <state width="1899" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1597265040234">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1597269393463">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265040234" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
     <state width="1899" height="187" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1596333873507">
@@ -323,16 +335,17 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596333873507" />
-    <state x="2381" y="162" key="SettingsEditor" timestamp="1597264818591">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="511" y="309" key="SettingsEditor" timestamp="1597269065278">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="2381" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597264818591" />
+    <state x="511" y="309" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269065278" />
+    <state x="2381" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597267212137" />
     <state x="809" y="221" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596356854467" />
     <state x="461" y="168" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1596660587935" />
-    <state x="2472" y="253" key="Vcs.Push.Dialog.v2" timestamp="1597209847932">
+    <state x="2472" y="253" key="Vcs.Push.Dialog.v2" timestamp="1597265193451">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2472" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597209847932" />
+    <state x="2472" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265193451" />
     <state x="2012" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1596422624313">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

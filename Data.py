@@ -1,15 +1,16 @@
 from datetime import datetime
+
+import numpy as np
+import pandas as pd
+from dateutil.relativedelta import relativedelta
+from pandas import DataFrame
 from scipy import stats
 from yahoo_fin import stock_info as si
-import pandas as pd
-import numpy as np
-from pandas import DataFrame
-import requests
-from pyllist import sllist
-from dateutil.relativedelta import relativedelta
-import matplotlib.pyplot as plt
+
 import Stock as st
 import list
+
+
 class DataCollection:
     def __init__(self, portfolio):
         self.tickers = list.stock_list1
@@ -222,9 +223,11 @@ class data_indicators:
         macd = self.macd(stock)
         signal = macd.ewm(span=9).mean().fillna('-')
         x = [0, 1]
-        y = [macd[len(macd) - 2], macd[len(macd)]]
-        z = stats.linregress(x, y)
+        y = [macd[len(macd) - 2], macd[len(macd) - 1]]
+        slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+        z = slope
         print(z)
+
         macd = macd.to_numpy()
         signal = signal.to_numpy()
 
