@@ -60,6 +60,7 @@ class data_indicators:
         self.ticker = ticker
         self.org_period = period
         self.period = period
+        self.strength = 0
 
     def weekend_check(self):
         date = datetime.date(datetime.now())
@@ -126,8 +127,8 @@ class data_indicators:
         return self.stock_dict
 
     def macd(self, ticker):
-        ewm_12 = self.ewm_full_data(ticker, self.org_period + 22, 10)  # change period to param probably
-        ewm_26 = self.ewm_full_data(ticker, self.org_period + 22, 22)
+        ewm_12 = self.ewm_full_data(ticker, self.period + 22, 10)  # change period to param probably
+        ewm_26 = self.ewm_full_data(ticker, self.period + 22, 22)
 
         df = DataFrame
 
@@ -204,53 +205,71 @@ class data_indicators:
         return df
 
     def stock_check(self):
-        dic = {}
         buy = True
-        index = self.org_period - self.period
-        stock = self.stock_create(self.ticker)
-        # price = si.get_live_price(self.ticker)
-        data = stock.historical_data(self.org_period)
-        data = data.drop(columns={'ticker', 'open', 'high', 'low', 'volume'})
-        data = data.to_numpy()
-        price = data[index]
-        x = self.ewm_full_data(stock, self.org_period + 10, 10)
-        x = x.drop(columns="ticker")
-        # x = x.tail(1)
-        # x = x.iloc[:, -1]
-        x = x.to_numpy()
-        # x = float(x.to_string(index=False))
-        emw_price = x[index]
-        diff = emw_price - price
-        percent = (diff / emw_price) * 100
-        macd = self.macd(stock)
-        signal = macd.ewm(span=9).mean().fillna('-')
-        x = [0, 1]
-        y = [macd[len(macd) - 2], macd[len(macd) - 1]]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-        z = slope
-        if z < 0:
-            strength = percent * -1
-        else:
-            strength = percent
+        try:
 
-        macd = macd.to_numpy()
-        signal = signal.to_numpy()
+            index = self.org_period - self.period
+            stock = self.stock_create(self.ticker)
+            # price = si.get_live_price(self.ticker)
+            data = stock.historical_data(self.org_period)
+            data = data.drop(columns={'ticker', 'open', 'high', 'low', 'volume'})
+            data = data.to_numpy()
+            price = data[len(data) - 1]
+            x = self.ewm_full_data(stock, self.org_period + 10, 10)
+            x = x.drop(columns="ticker")
+            # x = x.tail(1)
+            # x = x.iloc[:, -1]
+            x = x.to_numpy()
+            # x = float(x.to_string(index=False))
 
-        # macd = macd.tail(1)
-        # signal = signal.tail(1)
-        # signal = float(signal.to_string(index=False))
-        # macd = float(macd.to_string(index=False))
-        self.period -= 1
-        if len(macd) < 10:
+            emw_price = x[len(x) - 1]
+
+            diff = emw_price - price
+            percent = (diff / emw_price) * 100
+            macd = self.macd(stock)
+
+            signal = macd.ewm(span=9).mean().fillna('-')
+
+            m = (macd[len(macd) - 2] - macd[len(macd) - 1]) / (0 - 1)
+
+            if m < 0:
+                self.strength = percent * -1  # do something with slope here later
+            else:
+                self.strength = percent
+
+            macd = macd.to_numpy()
+
+            signal = signal.to_numpy()
+
+            if len(macd) < 10:
+                buy = False
+            else:
+                if emw_price < price:  # possibly add hour data for more accurate
+                    buy = False
+                if macd[len(macd) - 1] < signal[len(signal) - 1]:  # maybe look into this more macd span. yer yeet!
+                    buy = False
+                if price > self.max_trade or price <= 1:
+                    buy = False
+        except AssertionError:
+            print(self.ticker)
             buy = False
-        else:
-            if emw_price < price:  # possibly add hour data for more accurate
-                buy = False
-            if macd[index + 9] < signal[index + 8]:  # maybe look into this more macd span. yer yeet!
-                buy = False
-        if buy:
-            dict = {self.ticker: strength}
+
+        except IndexError:
+            print(self.ticker)
+            buy = False
         return buy
+
+    def dict_maker(self):  # Only run once per day until we get that op op poly data
+        dict = {}
+        i = 1
+        for val in self.list:
+            print(i)
+            self.ticker = val
+            if self.stock_check():
+                dict[val] = float(self.strength)
+            i += 1
+        dict = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+        return dict
 
     def sell_stock(self):
         if self.stock_check():
@@ -263,7 +282,8 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows", 100)
-
+b = data_indicators(list.stock_list, 500, "UA", 30)
+print(b.dict_maker())
 # stockies = []
 # b = DataCollection(500)
 # c = list.list_through_algo

@@ -22,6 +22,9 @@
     <list default="true" id="7e71e928-d09d-4ede-a267-b99ab87833a8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backtester.py" beforeDir="false" afterPath="$PROJECT_DIR$/backtester.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataPlt.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataPlt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/list.py" beforeDir="false" afterPath="$PROJECT_DIR$/list.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597269600025</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added a strength of stock value and if the stock is a buy add the stock and its strength to a dictionary">
+      <created>1597270734780</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1597270734780</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -276,7 +286,8 @@
     <MESSAGE value="Added rate of change for VIX a volatility index and then got average rate of change." />
     <MESSAGE value="added some backtesting and also some more checks for buying and selling." />
     <MESSAGE value="got slope of macd going to calculate strength of stock" />
-    <option name="LAST_COMMIT_MESSAGE" value="got slope of macd going to calculate strength of stock" />
+    <MESSAGE value="added a strength of stock value and if the stock is a buy add the stock and its strength to a dictionary" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a strength of stock value and if the stock is a buy add the stock and its strength to a dictionary" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -285,10 +296,10 @@
     </state>
     <state x="2334" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596331870593" />
     <state x="414" y="175" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596356166347" />
-    <state x="925" y="177" key="CommitChangelistDialog2" timestamp="1597269599383">
+    <state x="925" y="177" key="CommitChangelistDialog2" timestamp="1597270734187">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="925" y="177" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269599383" />
+    <state x="925" y="177" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597270734187" />
     <state x="2845" y="227" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265190441" />
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1596594979694">
       <screen x="1920" y="0" width="1920" height="1040" />
@@ -298,32 +309,32 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2660" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597264745255" />
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1597269393463">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom" timestamp="1597342803899">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
-    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597287706708" />
+    <state width="1899" height="163" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597342803899" />
     <state width="1899" height="187" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1597269393463">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center" timestamp="1597342803899">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
-    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597287706708" />
+    <state width="1899" height="163" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597342803899" />
     <state width="1899" height="187" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1597269393463">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left" timestamp="1597342803899">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
-    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597287706708" />
+    <state width="1899" height="163" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597342803899" />
     <state width="1899" height="187" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312821" />
     <state width="1899" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
-    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1597269393463">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right" timestamp="1597342803899">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269393463" />
-    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597268107512" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597287706708" />
+    <state width="1899" height="163" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597342803899" />
     <state width="1899" height="187" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360312822" />
     <state width="1899" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1596331405660" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1596333873507">
@@ -349,10 +360,10 @@
     <state x="2381" y="162" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597267212137" />
     <state x="809" y="221" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596356854467" />
     <state x="461" y="168" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1596660587935" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1597269602868">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1597270694505">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597269602868" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597270694505" />
     <state x="2472" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597265193451" />
     <state x="2012" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1596422624313">
       <screen x="1920" y="0" width="1920" height="1040" />
@@ -362,10 +373,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2576" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596823194790" />
-    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596757457218">
+    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597343745676">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596757457218" />
+    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597270688938" />
+    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597343745676" />
     <state x="2566" y="311" key="git4idea.merge.GitPullDialog" timestamp="1596422354683">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

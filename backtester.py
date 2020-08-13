@@ -19,10 +19,11 @@ class SmaCross(Strategy):
         self.buy_count = 0
         self.period = 30
 
+
     def next(self):
         list = []
         d = di(list, 500, val, self.period)
-        print(val)
+
         self.period -= 1
         if d.stock_check():
             self.buy()
@@ -37,6 +38,7 @@ class SmaCross(Strategy):
 
 # api error causes nones use try catch
 for val in list.test_pruned_list:
+    print(val)
     hist_data = st.Stock(val).historical_data(30)
     hist_data = hist_data.drop(columns=["ticker"])
     hist_data = hist_data.rename(
