@@ -282,8 +282,8 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows", 100)
-b = data_indicators(list.stock_list, 500, "UA", 30)
-print(b.dict_maker())
+# b = data_indicators(list.stock_list, 500, "UA", 30)
+# print(b.dict_maker())
 # stockies = []
 # b = DataCollection(500)
 # c = list.list_through_algo
