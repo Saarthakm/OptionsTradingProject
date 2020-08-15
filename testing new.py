@@ -19,9 +19,10 @@ class lstm_model:
     def aaaaa(self):
 
         stock = st.Stock("AAPL")
-        timeframe = 5000
+        timeframe = 2000
         test_time_frame = int(timeframe * 0.2)
         train_time_frame = timeframe - test_time_frame
+        smoothing_time = train_time_frame - test_time_frame
         dataset = stock.historical_data(timeframe)
         dataset = dataset.dropna()
         dataset_mid = pd.DataFrame()
@@ -34,9 +35,9 @@ class lstm_model:
         sc.fit(train_data)
         training_set_scaled = sc.transform(train_data)
 
-        smoothing_window = 750
+        smoothing_window = int(smoothing_time * .25)
 
-        for di in range(0, train_time_frame - test_time_frame, smoothing_window):
+        for di in range(0, smoothing_time, smoothing_window):
             sc.fit((train_data[di:di + smoothing_window]))
             training_set_scaled[di:di + smoothing_window] = sc.transform((train_data[di:di + smoothing_window]))
             sc.fit((train_data[di + smoothing_window:, :]))
@@ -78,9 +79,10 @@ class lstm_model:
         train_data = pd.DataFrame(train_data)
         test_data = pd.DataFrame(test_data)
 
-        all_mid_data = pd.concat((train_data[0], test_data[0]), axis=0)
-        dataset_total = all_mid_data
+        dataset_total = pd.concat((train_data[0], test_data[0]), axis=0)
+        print(dataset_total)
         inputs = dataset_total[len(dataset_total) - len(test_data) - window:].values
+        print(inputs)
         sc.fit(train_data)
         inputs = inputs.reshape(-1, 1)
         inputs = sc.transform(inputs)
