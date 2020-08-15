@@ -13,44 +13,34 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from keras.layers import BatchNormalization
+from keras.optimizers import Optimizer
 
 
 class lstm_model:
     def aaaaa(self):
 
-        stock = st.Stock("AA")
-        timeframe = 1024
-        test_time_frame = int(timeframe * 0.3)
-        train_time_frame = timeframe - test_time_frame
-        smoothing_time = train_time_frame - test_time_frame
-        dataset = stock.historical_data(timeframe)
+        stock = st.Stock("AAPL")
+        days = 1000
+        dataset = stock.historical_data(days)
         dataset = dataset.dropna()
         dataset_mid = pd.DataFrame()
         dataset_mid["avg"] = dataset[['high', 'low']].mean(axis=1)
+        timeframe = len(dataset_mid)
+        test_time_frame = int(timeframe * 0.3)
+        train_time_frame = timeframe - test_time_frame
+        train_data = dataset_mid.head(train_time_frame)
+
+        train_data = train_data.ewm(span=10)['avg'].mean().fillna('-')
         test_data = dataset_mid.tail(test_time_frame).to_numpy()
 
-        train_data = dataset_mid.head(train_time_frame).to_numpy()
+        # train_data = dataset_mid.head(train_time_frame).to_numpy()
 
         sc = MinMaxScaler(feature_range=(0, 1))
         sc.fit(train_data)
         training_set_scaled = sc.transform(train_data)
 
-        smoothing_window = int(smoothing_time * .25)
-
-        for di in range(0, smoothing_time, smoothing_window):
-            sc.fit((train_data[di:di + smoothing_window]))
-            training_set_scaled[di:di + smoothing_window] = sc.transform((train_data[di:di + smoothing_window]))
-            sc.fit((train_data[di + smoothing_window:, :]))
-            training_set_scaled[di + smoothing_window:, :] = sc.fit_transform(train_data[di + smoothing_window:, :])
-
-
-        EMA = 0.0
-        gamma = .1
-        for ti in range(len(train_data)):
-            EMA = gamma * train_data[ti] + (1 - gamma) * EMA
-            train_data[ti] = EMA
-
-        window = 100
+        window = 22
         x_train = []
         y_train = []
         for i in range(window, len(train_data)):
@@ -61,19 +51,16 @@ class lstm_model:
         x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
         regressor = Sequential()
-        regressor.add(LSTM(units=100, return_sequences=True, input_shape=(x_train.shape[1], 1)))
-        regressor.add(Dropout(.6))
-        regressor.add(LSTM(units=90, return_sequences=True))
-        regressor.add(Dropout(.4))
-        regressor.add(LSTM(units=70, return_sequences=True))
-        regressor.add(Dropout(.4))
-        regressor.add(LSTM(units=50))
-        regressor.add(Dropout(.2))
+        regressor.add(LSTM(units=128, return_sequences=True, input_shape=(x_train.shape[1], 1)))
+        regressor.add(Dropout(.3))
+        regressor.add(LSTM(units=128, return_sequences=True))
+        regressor.add(Dropout(.3))
+        regressor.add(LSTM(units=64, return_sequences=False))
+        regressor.add(Dropout(.3))
         regressor.add(Dense(units=1))
-        # regressor.compile(optimizer='adam', loss='mean_squared_logarithmic_error', metrics=['mse'])
         regressor.compile(optimizer='adam', loss='mean_squared_logarithmic_error', metrics=['accuracy'])
-        history = regressor.fit(x_train, y_train, epochs=150, batch_size=4)
-        # history = regressor.fit(x_train, y_train, epochs=150, batch_size=4, validation_split=.30)
+        history = regressor.fit(x_train, y_train, epochs=380, batch_size=512)
+        train_data = train_data.reshape(-1, 1)
         train_data = pd.DataFrame(train_data)
         test_data = pd.DataFrame(test_data)
 
@@ -90,12 +77,7 @@ class lstm_model:
         x_test = np.array(x_test)
 
         x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
-
         predicted_stock_price = regressor.predict(x_test)
-        # print(history.history['loss'])
-        # print(history.history['accuracy'])
-        # print(history.history['val_loss'])
-        # print(history.history['val_accuracy'])
         predicted_stock_price = sc.inverse_transform(predicted_stock_price)
         predicted_stock_price = pd.DataFrame(predicted_stock_price)
         predicted_stock_price = predicted_stock_price.iloc[10:]
@@ -105,10 +87,6 @@ class lstm_model:
         plt.title('Apple Stock Price Prediction')
         plt.xlabel('Time')
         plt.ylabel('Exponential Average of Apple''s price ')
-        # plt.plot(model.history['accuracy'], label = 'training loss')
-        # plt.plot(model.history['val_acc'], label = 'test loss')
-        # plt.xlabel("training loss")
-        # plt.ylabel("test loss")
         plt.legend()
         plt.show()
 
