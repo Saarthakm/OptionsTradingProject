@@ -30,11 +30,13 @@ data_conn = ap.stream2.StreamConn(api_key, api_secret,
                                   base_trade)  # will use this when we have live acc, not for paper trading
 
 
+# monitor cash balance
 @trade_conn.on(r'^account_updates$')
 async def on_account_updates(conn, channel, account):
     balance = account['cash']  # maybe make this cash_withdrawable?
 
 
+# writes all trades to respective csvs, logs filled, partially filled, etc
 @trade_conn.on(r'^trade_updates$')
 async def on_trade_updates(conn, channel, trade):
     trades.append(trade)  # maybe remove
@@ -58,23 +60,27 @@ async def on_trade_updates(conn, channel, trade):
             json.dump(requested_trades, f, indent=4)
 
 
+# starts
 def ws_start():
     trade_conn.run(['account_updates', 'trade_updates'])
 
 
 # pass in asset with buy or sell direction
+# TO-DO add quantity once we determine how we will do quantity
 def submit_order(asset, direction):
     api.submit_order(symbol=asset['symbol'], qty=1, side=direction, type='market',
                      time_in_force='day')  # change market buy later on
     # add stuff for stop limits, limits, etc once non market order
 
 
+# only trades active hours, no after hours currently
 def check_open():
     clock = api.get_clock()
     close = clock.next_close
     return clock.next_close > clock.timestamp
 
 
+# within limits we define, I.E. probably stop trading within 20 mins of close
 def actively_trading():
     clock = api.get_clock()
     #
@@ -102,7 +108,7 @@ def start_trader():
 
     # trading next
     while (check_open() == True):
-        assets = parse_stocks()
+        assets = parse_stocks()  # check current holdings
         # maybe add some sleeps
         while (actively_trading() == True):
             for i in range(len(assets)):

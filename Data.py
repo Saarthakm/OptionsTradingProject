@@ -16,9 +16,11 @@ class DataCollection:
         self.tickers = list.stock_list1
 
         self.portfolio = portfolio
-        self.max_trade = self.portfolio/20
+        self.max_trade = self.portfolio / 20
         self.stockPrice = 0
         self.list = []
+
+    # only use this if getting stock names from yahoo_fin, not alpacas
     def list_to_frame(self):
 
         for val in range(len(self.tickers)):
@@ -43,8 +45,6 @@ class DataCollection:
         return self.list
 
 
-
-
 class data_indicators:
     def __init__(self, list, portfolio, ticker, period):
         self.list = list
@@ -62,6 +62,7 @@ class data_indicators:
         self.period = period
         self.strength = 0
 
+    # corrects day to most recent trading day if current day is weekend
     def weekend_check(self):
         date = datetime.date(datetime.now())
         if date.weekday() == 5:
@@ -70,10 +71,12 @@ class data_indicators:
             return datetime.date(datetime.now()) + relativedelta(days=-2)
         return date
 
+    # creates stock
     def stock_create(self, tick):
         s = st.Stock(tick)
         return s
 
+    # returns sma for current day
     def sma(self, ticker, period_days, window):
         self.data = ticker.historical_data(period_days)
         self.data["Simple Moving Average"] = self.data['close'].rolling(window=window).mean().fillna('')
@@ -82,19 +85,22 @@ class data_indicators:
         self.data = float(self.data.to_string(index=False))
         return self.data
 
+    # returns sma df for all days in period
     def sma_full_data(self, ticker, period_days, window):
         self.data = ticker.historical_data(period_days + 1000)
-        self.data["Simple Moving Average " + str(window) +" days"] = self.data['close'].rolling(
-            window= window).mean().fillna('')
+        self.data["Simple Moving Average " + str(window) + " days"] = self.data['close'].rolling(
+            window=window).mean().fillna('')
         self.data = self.data.drop(columns=["open", "volume", "high", "low", "close"])
         return self.data
 
+    # avg of volume
     def volumetric_sma(self, ticker, period, window):
-        volume_data= self.volume_data(ticker, period)
+        volume_data = self.volume_data(ticker, period)
         volume_data[str(window) + " day volumetric SMA"] = volume_data.rolling(window=window).mean().fillna('')
         volume_data = volume_data.drop(columns=["volume"])
         return volume_data
 
+    # returns ewa for period and span
     def ewm_full_data(self, ticker, period_days, span):
         self.data = ticker.historical_data(period_days)
         self.data["EWA " + str(span) + " days"] = self.data.ewm(span=span)['close'].mean().fillna('-')
@@ -102,30 +108,20 @@ class data_indicators:
 
         return self.data
 
-
+    # returns last row as float for dataframe
     def dataframe_short_float(self, data):
         data = data.tail(1)
         data = data.iloc[:, -1]
         data = float(data.to_string(index=False))
         return data
 
+    # returns volume data
     def volume_data(self, ticker, period_days):
         self.data = ticker.historical_data(period_days)
         self.data = self.data.drop(columns=["open", "high", "low", "close"])
         return self.data
 
-    def compare_sma(self, long_sma, short_sma):
-        if long_sma < short_sma:
-            return True
-        else:
-            return False
-
-    def analyze_pruned_list(self):
-        for val in range(len(self.list)):
-            stock = st.Stock(self.list[val])
-            self.stock_dict[self.list[val]] = self.compare_sma(self.sma(stock, 21), self.sma(stock, 13))
-        return self.stock_dict
-
+    # calculates macd
     def macd(self, ticker):
         ewm_12 = self.ewm_full_data(ticker, self.period + 22, 10)  # change period to param probably
         ewm_26 = self.ewm_full_data(ticker, self.period + 22, 22)
@@ -137,6 +133,7 @@ class data_indicators:
 
         return df
 
+    # calculates rsi
     def compute_rsi(self, ticker, timewindow):
         ticker = st.Stock(ticker)
         datum = ticker.historical_data(365)
@@ -153,6 +150,8 @@ class data_indicators:
         rs = abs(up_chg_avg / down_chg_avg)
         rsi = 100 - (100 / (1 + rs))
         return rsi
+
+    # calculates diff in volume
     def volume_oscillator(self, ticker):
         df1 = self.volumetric_sma(ticker, 500, 28)
         df2 = self.volumetric_sma(ticker, 500, 14)
@@ -172,6 +171,7 @@ class data_indicators:
         # d3 = np.subtract(df2["14 day volumetric SMA"], df1["28 day volumetric SMA"])
         return df
 
+    # calculates rate of change for volatility index
     def vix_roc(self, number_days):
         vix = st.Stock("^VIX")
         data = si.get_data("^VIX", self.cur_date + relativedelta(days=-(number_days + 22)),
@@ -192,6 +192,7 @@ class data_indicators:
 
         return data2
 
+    # not sure why we made this, average of the vix rate of change
     def avg_vix_roc(self):
         list = []
         for i in range(22, 1, -1):
@@ -204,6 +205,7 @@ class data_indicators:
         df = float(df.to_string(index=False))
         return df
 
+    # current version for buying
     def stock_check(self):
         buy = True
         try:
@@ -230,10 +232,10 @@ class data_indicators:
 
             signal = macd.ewm(span=9).mean().fillna('-')
 
-            m = (macd[len(macd) - 2] - macd[len(macd) - 1]) / (0 - 1)
+            m = (macd[len(macd) - 2] - macd[len(macd) - 1]) / (0 - 1)  # calculate slope of macd
 
             if m < 0:
-                self.strength = percent * -1  # do something with slope here later
+                self.strength = percent * -1  # if slope negative, then invert our strength of stock
             else:
                 self.strength = percent
 
@@ -241,24 +243,26 @@ class data_indicators:
 
             signal = signal.to_numpy()
 
-            if len(macd) < 10:
+            if len(macd) < 10:  # if days are missing from data
                 buy = False
             else:
                 if emw_price < price:  # possibly add hour data for more accurate
                     buy = False
                 if macd[len(macd) - 1] < signal[len(signal) - 1]:  # maybe look into this more macd span. yer yeet!
                     buy = False
-                if price > self.max_trade or price <= 1:
+                if price > self.max_trade or price <= 1:  # "get rid of shitter penny stocks"
                     buy = False
-        except AssertionError:
+        except AssertionError:  # stock is listed on alpacas but not yahoo
             print(self.ticker)
             buy = False
 
-        except IndexError:
+        except IndexError:  # day or more is missing from data
             print(self.ticker)
             buy = False
         return buy
 
+    # returns dictionary with stocks that pass initial buy check
+    # Value is strength number
     def dict_maker(self):  # Only run once per day until we get that op op poly data
         dict = {}
         i = 1
@@ -271,6 +275,7 @@ class data_indicators:
         dict = sorted(dict.items(), key=lambda x: x[1], reverse=True)
         return dict
 
+    # Currently inverse of buying
     def sell_stock(self):
         if self.stock_check():
             return False
@@ -278,10 +283,14 @@ class data_indicators:
             return True
 
 
+# format df outputs
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option("display.max_columns", 12)
 pd.set_option("display.max_rows", 100)
+
+# testing stock check and eval strength numbers
+
 # b = data_indicators(list.stock_list, 500, "UA", 30)
 # print(b.dict_maker())
 # stockies = []
@@ -303,12 +312,3 @@ pd.set_option("display.max_rows", 100)
 # print(stockies)
 
 
-# print(a.analyze_pruned_list)
-# ua = Stock('HRC')
-# ub = st.Stock('AMD')
-# uc = st.Stock('UA')
-# stocks = [ua,ub,uc]
-
-# c = OPAlgorithms(stockies, 200)
-# c.data_plot()
-# print(a.sma(ua ,20).to_string)
