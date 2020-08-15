@@ -29,19 +29,21 @@ class MultiLinearRegression:
         self.live_price = si.get_live_price(self.ticker)
         return self.live_price
 
-    def get_historic_data(ticker):
-            self.data = si.get_data(ticker, start_date=self.startdate, end_date=self.enddate, index_as_date=False)
+    def get_historic_data(self):
+            self.data = si.get_data(self.ticker, start_date=self.startdate, end_date=self.enddate, index_as_date=False)
             return self.data
 
     def crossValidation(self):
         return 0
 
     def train_test_split(self):
-        X = get_historic_data(self.ticker)
+        X = self.get_historic_data()
         temp = X
-        X = X.drop('adjclose')
+        X = X.drop(columns = ['adjclose', 'close', 'ticker'])
         Y = pd.Series(temp['adjclose'])
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, train_size = .9)
+        self.X_train = self.X_train.drop(self.X_train.columns[0], axis=1)
+        self.X_test = self.X_test.drop(self.X_test.columns[0], axis=1)
         return self.X_train, self.X_test, self.Y_train, self.Y_test
 
 
@@ -49,9 +51,22 @@ class MultiLinearRegression:
         return np.sqrt(np.mean((actual_y - predicted_y) ** 2))
 
 
-    def customFeatureEngineering(self, self.X):
-        df =
 
-    def buildMultiRegModel(self, ticker):
-        df = get_historic_data(ticker)
+
+    def buildMultiRegModel(self):
+        df = self.train_test_split()
         regressor = linear_model.LinearRegression()
+        regressor.fit(self.X_train, self.Y_train)
+        prediction = regressor.predict(self.X_test)
+        return prediction
+
+    def calculatePercentDiff(self):
+        X = self.buildMultiRegModel()
+        return np.average(((X - self.Y_test) / (self.Y_test)) * 100)
+
+
+AMD = MultiLinearRegression('amd', '12/1/2011', '8/1/2020')
+AMD.get_historic_data()
+x_tr, x_tst, y_tr, y_tst = AMD.train_test_split()
+print(AMD.calculatePercentDiff())
+#print(AMD.rmse(AMD.Y_test, AMD.buildMultiRegModel()))
