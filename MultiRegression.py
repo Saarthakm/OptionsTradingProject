@@ -4,6 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import explained_variance_score
+from sklearn import metrics
+
 
 
 
@@ -17,20 +20,29 @@ class MultiLinearRegression:
         self.ticker = ticker
         self.startdate = startdate
         self.enddate = enddate
-        self.liveprice = None
+        self.liveprice = si.get_live_price(self.ticker)
         self.X_train = None
         self.Y_train = None
         self.X_test = None
         self.Y_test = None
         self.data = None
+        self.predictions = None
+        #all data of tomorrow except open price
+        self.yesterdayData = None
+        self.fittedRegressor = None
+        self.tomorrowPredictedPrice = None
 
-
-    def get_curr_price(self):
-        self.live_price = si.get_live_price(self.ticker)
-        return self.live_price
 
     def get_historic_data(self):
             self.data = si.get_data(self.ticker, start_date=self.startdate, end_date=self.enddate, index_as_date=False)
+            temp = si.get_data(self.ticker, start_date=self.startdate, end_date=self.enddate, index_as_date=False)
+            self.yesterdayData = temp.tail(1)
+            self.yesterdayData = self.yesterdayData.drop(columns = ['adjclose', 'close', 'ticker'])
+            self.yesterdayData = self.yesterdayData.drop(self.yesterdayData.columns[0], axis=1)
+            self.data[['high', 'low', 'close', 'adjclose', 'volume', 'ticker']] = self.data[['high', 'low', 'close', 'adjclose', 'volume', 'ticker']].shift(1)
+            self.data = self.data.tail(len(self.data) - 1)
+            #DO THE YESTERDAYDATA STUFF LATER!!!!! DON'T FORGET!
+
             return self.data
 
     def crossValidation(self):
@@ -51,22 +63,46 @@ class MultiLinearRegression:
         return np.sqrt(np.mean((actual_y - predicted_y) ** 2))
 
 
-
-
     def buildMultiRegModel(self):
         df = self.train_test_split()
         regressor = linear_model.LinearRegression()
-        regressor.fit(self.X_train, self.Y_train)
-        prediction = regressor.predict(self.X_test)
+        fittedReg = regressor.fit(self.X_train, self.Y_train)
+        prediction = fittedReg.predict(self.X_test)
+        self.predictions = prediction
+        self.fittedRegressor = fittedReg
         return prediction
 
     def calculatePercentDiff(self):
         X = self.buildMultiRegModel()
         return np.average(((X - self.Y_test) / (self.Y_test)) * 100)
 
+    def score(self):
+        self.buildMultiRegModel()
+        print("Model R^2: " + str(metrics.r2_score(self.Y_test, self.predictions)))
 
-AMD = MultiLinearRegression('amd', '12/1/2011', '8/1/2020')
+    def predictTomorrowsPrice(self):
+        pred = self.fittedRegressor.predict(self.yesterdayData)
+        self.tomorrowPredictedPrice = pred[0]
+        print("Tomorrow, " + self.ticker.upper() + " share is predicted to be priced at: $" + str(pred[0]))
+        print("Yesterday at close, " + self.ticker.upper() + " was trading at: $" + str(self.liveprice))
+        print("")
+
+
+
+AMD = MultiLinearRegression('amd', '12/1/2000', '8/14/2020')
 AMD.get_historic_data()
-x_tr, x_tst, y_tr, y_tst = AMD.train_test_split()
-print(AMD.calculatePercentDiff())
-#print(AMD.rmse(AMD.Y_test, AMD.buildMultiRegModel()))
+AMD.train_test_split()
+AMD.buildMultiRegModel()
+AMD.predictTomorrowsPrice()
+
+MSFT = MultiLinearRegression('msft', '12/1/2000', '8/14/2020')
+MSFT.get_historic_data()
+MSFT.train_test_split()
+MSFT.buildMultiRegModel()
+MSFT.predictTomorrowsPrice()
+
+AMD = MultiLinearRegression('lyft', '12/1/2019', '8/14/2020')
+AMD.get_historic_data()
+AMD.train_test_split()
+AMD.buildMultiRegModel()
+AMD.predictTomorrowsPrice()
