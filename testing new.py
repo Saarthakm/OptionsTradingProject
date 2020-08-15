@@ -18,9 +18,9 @@ from keras.layers import Dropout
 class lstm_model:
     def aaaaa(self):
 
-        stock = st.Stock("AAPL")
-        timeframe = 2000
-        test_time_frame = int(timeframe * 0.2)
+        stock = st.Stock("AA")
+        timeframe = 1024
+        test_time_frame = int(timeframe * 0.3)
         train_time_frame = timeframe - test_time_frame
         smoothing_time = train_time_frame - test_time_frame
         dataset = stock.historical_data(timeframe)
@@ -43,16 +43,14 @@ class lstm_model:
             sc.fit((train_data[di + smoothing_window:, :]))
             training_set_scaled[di + smoothing_window:, :] = sc.fit_transform(train_data[di + smoothing_window:, :])
 
-        # training_set_scaled = training_set_scaled.reshape(-1)
-        # train_data = sc.transform(train_data)
+
         EMA = 0.0
         gamma = .1
-
         for ti in range(len(train_data)):
             EMA = gamma * train_data[ti] + (1 - gamma) * EMA
             train_data[ti] = EMA
 
-        window = 50
+        window = 100
         x_train = []
         y_train = []
         for i in range(window, len(train_data)):
@@ -63,26 +61,25 @@ class lstm_model:
         x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
         regressor = Sequential()
-        regressor.add(LSTM(units=200, return_sequences=True, input_shape=(x_train.shape[1], 1)))
-        regressor.add(Dropout(.2))
-        regressor.add(LSTM(units=200, return_sequences=True))
-        regressor.add(Dropout(.2))
-        regressor.add(LSTM(units=200, return_sequences=True))
-        regressor.add(Dropout(.2))
-        regressor.add(LSTM(units=150))
+        regressor.add(LSTM(units=100, return_sequences=True, input_shape=(x_train.shape[1], 1)))
+        regressor.add(Dropout(.6))
+        regressor.add(LSTM(units=90, return_sequences=True))
+        regressor.add(Dropout(.4))
+        regressor.add(LSTM(units=70, return_sequences=True))
+        regressor.add(Dropout(.4))
+        regressor.add(LSTM(units=50))
         regressor.add(Dropout(.2))
         regressor.add(Dense(units=1))
         # regressor.compile(optimizer='adam', loss='mean_squared_logarithmic_error', metrics=['mse'])
-        regressor.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-        model = regressor.fit(x_train, y_train, epochs=130, batch_size=500)
-
+        regressor.compile(optimizer='adam', loss='mean_squared_logarithmic_error', metrics=['accuracy'])
+        history = regressor.fit(x_train, y_train, epochs=150, batch_size=4)
+        # history = regressor.fit(x_train, y_train, epochs=150, batch_size=4, validation_split=.30)
         train_data = pd.DataFrame(train_data)
         test_data = pd.DataFrame(test_data)
 
         dataset_total = pd.concat((train_data[0], test_data[0]), axis=0)
-        print(dataset_total)
+
         inputs = dataset_total[len(dataset_total) - len(test_data) - window:].values
-        print(inputs)
         sc.fit(train_data)
         inputs = inputs.reshape(-1, 1)
         inputs = sc.transform(inputs)
@@ -91,19 +88,23 @@ class lstm_model:
         for i in range(window, len(test_data) + window):  # the range is monkaW
             x_test.append(inputs[i - window:i, 0])
         x_test = np.array(x_test)
+
         x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+
         predicted_stock_price = regressor.predict(x_test)
-
+        # print(history.history['loss'])
+        # print(history.history['accuracy'])
+        # print(history.history['val_loss'])
+        # print(history.history['val_accuracy'])
         predicted_stock_price = sc.inverse_transform(predicted_stock_price)
-
         predicted_stock_price = pd.DataFrame(predicted_stock_price)
-
+        predicted_stock_price = predicted_stock_price.iloc[10:]
         real_stock_price = pd.DataFrame(test_data).values
-        plt.plot(real_stock_price, color='red', label='Real Apple Stock Price')
-        plt.plot(predicted_stock_price, color='blue', label='Predicted Apple Stock Price')
+        plt.plot(real_stock_price, color='red', label='EMA of Average Price')
+        plt.plot(predicted_stock_price, color='blue', label='Predicted Price Average')
         plt.title('Apple Stock Price Prediction')
         plt.xlabel('Time')
-        plt.ylabel('Apple Stock Price')
+        plt.ylabel('Exponential Average of Apple''s price ')
         # plt.plot(model.history['accuracy'], label = 'training loss')
         # plt.plot(model.history['val_acc'], label = 'test loss')
         # plt.xlabel("training loss")
