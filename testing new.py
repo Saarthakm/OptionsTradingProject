@@ -9,12 +9,12 @@ import sss as tf
 import os
 import urllib.request, json
 from sklearn.preprocessing import MinMaxScaler
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import LSTM
-from keras.layers import Dropout
-from keras.layers import BatchNormalization
-from keras.optimizers import Optimizer
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import LSTM
+from tensorflow.keras.layers import Dropout
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.optimizers import Optimizer
 
 
 class lstm_model:
