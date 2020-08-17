@@ -12,9 +12,11 @@ from keras.layers import Dropout
 from tensorflow.keras import activations
 
 class lstm_model:
-    def aaaaa(self, hist=1000, epoch=100, batch_size=4, window=25, dropout=.5, dropout2=0.5, dropout3=0.5, dropout4=0.5,
-              unit1=500, unit2=500, unit3=500, unit4=500):
-
+    def aaaaa(self, hist=1000, epoch=100, batch_size=16, window=100, dropout=.5,
+              unit1=1000, unit2=1000, unit3=1000, unit4=1000):
+        # def aaaaa(self, hist=1000, epoch=100, batch_size=16, window=25, dropout=.5, dropout2=0.5, dropout3=0.5,
+        #               dropout4=0.5,
+        #               unit1=500, unit2=500, unit3=500, unit4=500):
         stock = st.Stock("AAPL")
 
         dataset = stock.historical_data(hist)
@@ -65,11 +67,11 @@ class lstm_model:
         regressor.add(Dropout(dropout))
 
         regressor.add(LSTM(units=unit2, return_sequences=True))
-        regressor.add(Dropout(dropout2))
+        regressor.add(Dropout(.5))
         regressor.add(LSTM(units=unit3, return_sequences=True))
-        regressor.add(Dropout(dropout3))
+        regressor.add(Dropout(.5))
         regressor.add(LSTM(units=unit4))
-        regressor.add(Dropout(dropout4))
+        regressor.add(Dropout(.5))
         regressor.add(Dense(units=1))
 
         # regressor.compile(optimizer='adam', loss='mean_squared_logarithmic_error', metrics=['mse'])
@@ -116,7 +118,7 @@ class lstm_model:
         print((t / length))
 
         predicted_stock_price = pd.DataFrame(predicted_stock_price)
-        # predicted_stock_price = predicted_stock_price.iloc[10:]
+        predicted_stock_price = predicted_stock_price.iloc[10:]
         real_stock_price = pd.DataFrame(test_data).values
         # real_stock_price = pd.DataFrame(test_data)
 
@@ -130,15 +132,15 @@ class lstm_model:
         plt.show()
 
     def testing_hp(self):
-        hist = [2000]
-        epoch = [125]
-        batch_size = [4, 10]
-        window = [30]
-        dropout = [.3]
-        unit1 = [4, 10, 20, 40, 60, 100]
-        unit2 = [4, 10, 20, 40, 60, 100]
-        unit3 = [4, 10, 20, 40, 60, 100]
-        unit4 = [4, 10, 20, 40, 60, 100]
+        hist = [1000]
+        epoch = [50, 100, 150]
+        batch_size = [4, 8]
+        window = [25, 50]
+        dropout = [.5]
+        unit1 = [500, 1000]
+        unit2 = [500, 1000]
+        unit3 = [500, 1000]
+        unit4 = [500, 1000]
         for h in hist:
             for e in epoch:
                 for b in batch_size:
