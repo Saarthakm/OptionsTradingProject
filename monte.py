@@ -6,7 +6,7 @@ from scipy.stats import norm
 
 import Stock as st
 
-amd = st.Stock("COTY")
+amd = st.Stock("AA")
 data = amd.historical_data(3000)
 data = data["open"]
 
@@ -28,7 +28,7 @@ x = norm.ppf(x)
 Z = norm.ppf(np.random.rand(10, 2))
 
 t_intervals = 1000
-iterations = 10
+iterations = 100
 
 daily_returns = np.exp(drift + stdev * norm.ppf(np.random.rand(t_intervals, iterations)))
 S0 = data.iloc[-1]
@@ -38,9 +38,11 @@ for t in range(1, t_intervals):
     price_list[t] = price_list[t - 1] * daily_returns[t]
 
 a = np.mean(price_list, axis=1, dtype=np.float64)
-print(a)
+b = np.median(price_list, axis=1)
+
 plt.figure(figsize=(10, 6))
 plt.plot(a)
+plt.plot(b)
 plt.show()
 
 plt.figure(figsize=(10, 6))
