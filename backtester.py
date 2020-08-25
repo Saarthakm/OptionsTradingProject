@@ -39,7 +39,7 @@ class SmaCross(Strategy):
 # api error causes nones use try catch
 for val in list.test_pruned_list:
     print(val)
-    hist_data = st.Stock(val).historical_data(30)
+    hist_data = st.Stock(val).historical_data(100)
     hist_data = hist_data.drop(columns=["ticker"])
     hist_data = hist_data.rename(
         columns={'open': "Open", 'high': "High", 'low': "Low", 'close': "Close", 'volume': "Volume"})
@@ -47,6 +47,6 @@ for val in list.test_pruned_list:
 
     btest = Backtest(hist_data, SmaCross, trade_on_close=True, exclusive_orders=True)
     stats = btest.run()
-    # print(stats)
+    print(stats)
     btest.plot()
 # btest = Backtest(data, SmaCross,trade_on_close=True)

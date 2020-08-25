@@ -51,5 +51,6 @@ class Stock:
         call_back_date = self.current_date + relativedelta(days=-period)
         self.full_data = si.get_data(self.ticker, call_back_date, self.current_date)
         self.full_data = self.full_data.drop(columns=["adjclose"])
+        self.full_data = self.full_data.dropna()
         self.full_data = self.full_data.reindex(columns=self.column_list)
         return self.full_data

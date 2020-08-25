@@ -19,11 +19,17 @@ account = api.get_account()
 print(account)
 active_assets = api.list_assets(status='active')
 print(active_assets[0])
-for i in range(200):
-    try:
-        print(api.get_last_quote(active_assets[i].symbol))
-    except APIError:
-        print(active_assets[i])
+for i in range(3):
+    # api.submit_order(symbol=active_assets[i].symbol, qty=2, side='sell', type='market',
+    #                  time_in_force='day')
+    api.submit_order(symbol="GOOG", qty=10, side='buy', type='market',
+                     time_in_force='day')
+print(api.list_orders())
+# for i in range(200):
+#     try:
+#         print(api.get_last_quote(active_assets[i].symbol))
+#     except APIError:
+#         print(active_assets[i])
 
 trade_conn = ap.stream2.StreamConn(api_key, api_secret, base_trade)
 data_conn = ap.stream2.StreamConn(api_key, api_secret,
@@ -89,28 +95,60 @@ def actively_trading():
     pass
 
 
-# makes asset list for pruned stocks list
-def parse_stocks():
-    # stock_list = whatever we pass in from algo
-    # asset = api.get_asset(stock_list[i])
-    # asset_list[i] = asset
-    # return asset_list
+# parse holdings from  holdings csv
+def parse_holdings():
+    # read in holdings from csv
+    return list
+
+
+# update holdings from trade csv to ensure only assets that are actually filled are bought
+# make sure to acc for quantity
+def update_holdings():
+    # read in past_trades
+
+    # maybe use trades[] instead of csv
+    return list
+
+
+def get_buys():
+    # gets stocks to buy from algo
+    # TO DO if quantity added, make dict with ticker key, val pair
+    return list
+
+
+def get_sell():
+    # gets sells from holdings
+    return list
+
+
+# something something stop loss
+def stop_loss():
     pass
 
 
 # starts trader and cancels all current orders to avoid any monkey business
 def start_trader():
     api.cancel_all_orders()
+    holdings = parse_holdings()
     balance = api.get_account()['cash']
     ws_thread = threading.Thread(target=ws_start, daemon=True)  # low prio thread? maybe no daemon
     ws_thread.start()
     sleep(10)  # buffer for initialize
 
     # trading next
-    while (check_open() == True):
-        assets = parse_stocks()  # check current holdings
+    while check_open() == True:
+        assets = parse_holdings()  # check current holdings
+        buys = get_buys()  # get stocks to buy
+        sells = get_sell()  # get sells
         # maybe add some sleeps
-        while (actively_trading() == True):
-            for i in range(len(assets)):
-                submit_order(assets[i])
-                assets.remove(assets[i])  # this will be inefficient
+        while actively_trading() == True and balance >= 1.00:
+            for i in range(len(buys)):  # change to for each when dict implement for qty
+                submit_order(buys[i], 'buy')
+            for g in range(len(sells)):
+                submit_order(sells[g], 'sell')
+            update_holdings()
+            assets = parse_holdings()
+            # update buys
+            # update sells
+            balance = api.get_account()['cash']
+            # if we dont update data as frequent as possible then it will just do same buying an selling XD

@@ -282,6 +282,8 @@ class data_indicators:
         else:
             return True
 
+    # def actually_sell(self):
+
 
 # format df outputs
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
