@@ -3,10 +3,12 @@ import threading
 from time import sleep
 import json
 import logging
-import alpaca_backtrader_api as ap_bt
+
 from alpaca_trade_api.rest import APIError
 
 api_key = 'PK3Y5N2FQHN84K1BWSJ7'
+luis_api_key = 'AKM8I6JTLDYHNMQT9RLN'
+luis_secret_key = 'Ala8vPXcuMxQieOhay8OUmpCP01AWTndVhpAbPPA'
 api_secret = '/LhQfCCcu1n5E6eNLVXHVOA3FQhIuaj8JfmjtMYB'
 base_trade = 'https://paper-api.alpaca.markets'  # for trading
 base_data = 'https://data.alpaca.markets/v1'  # for data
@@ -141,7 +143,7 @@ def start_trader():
         buys = get_buys()  # get stocks to buy
         sells = get_sell()  # get sells
         # maybe add some sleeps
-        while actively_trading() == True and balance >= 1.00:
+        while actively_trading() is True and balance >= 1.00:
             for i in range(len(buys)):  # change to for each when dict implement for qty
                 submit_order(buys[i], 'buy')
             for g in range(len(sells)):
