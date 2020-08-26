@@ -20,15 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e71e928-d09d-4ede-a267-b99ab87833a8" name="Default Changelist" comment="actually works maybe">
-      <change afterPath="$PROJECT_DIR$/problema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LSTM HYPE.py" beforeDir="false" afterPath="$PROJECT_DIR$/LSTM HYPE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaperTrader.py" beforeDir="false" afterPath="$PROJECT_DIR$/PaperTrader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aaaaaaaaaaaaa.py" beforeDir="false" afterPath="$PROJECT_DIR$/aaaaaaaaaaaaa.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/f.py" beforeDir="false" afterPath="$PROJECT_DIR$/f.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monte.py" beforeDir="false" afterPath="$PROJECT_DIR$/monte.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sss.py" beforeDir="false" afterPath="$PROJECT_DIR$/sss.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -369,6 +362,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="we added macd ewm and visualization" />
     <MESSAGE value="Separated some of the classes into different files" />
@@ -474,11 +470,12 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2576" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1596823194790" />
-    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598376679550">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="769" y="454" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598409856757">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598376679550" />
     <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597555875425" />
+    <state x="769" y="454" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1598409856757" />
     <state x="222" y="-8" width="1432" height="836" key="dock-window-1" timestamp="1597467676704">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
