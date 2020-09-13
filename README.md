@@ -1,2 +1,2 @@
-# Optionize: Options Trading Visualizer
-•	Software tool for options traders to visualize stock options prices and Greek values to track options trends overtime
+# Quant Trading Project
+•	Experimentation with different modeling schemes for trading
